@@ -61,16 +61,17 @@ export const QUESTIONS = [
   { id: "Q60", category: "Aesthetic & Sensitivity", text: "この人は、刺激が強い環境より落ち着いた環境を好む", weight: 1.0 }
 ];
 
-export const QUESTION_CATEGORIES = [
-  "Communication",
-  "Conflict & Decisions",
-  "Work & Collaboration",
-  "Schedule & Commitments",
-  "Boundaries & Distance",
-  "Creativity & Making",
-  "Independence & Nonconformity",
-  "Different Perspective",
-  "Aesthetic & Sensitivity"
+export const SIMPLE_QUESTION_IDS = [
+  "Q15",
+  "Q01",
+  "Q37",
+  "Q23",
+  "Q53",
+  "Q29",
+  "Q11",
+  "Q57",
+  "Q45",
+  "Q05",
 ];
 
 export const QUESTION_BY_ID = Object.fromEntries(QUESTIONS.map((q) => [q.id, q]));

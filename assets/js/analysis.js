@@ -6,7 +6,8 @@ export function runAnalysis(state) {
   const people = state.people || [];
   const questions = getAllQuestions(state);
   const weights = state.settings?.weights || {};
-  const minAnswers = Number(state.settings?.analysis?.minAnswers ?? 7);
+  const rawMinAnswers = Number(state.settings?.analysis?.minAnswers ?? 7);
+  const minAnswers = Math.min(Math.max(0, rawMinAnswers), questions.length);
   const participationScaling = !!state.settings?.analysis?.participationScaling;
   const stabilityWins = Number(state.settings?.analysis?.stabilityWins ?? 4);
 

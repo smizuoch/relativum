@@ -1,4 +1,4 @@
-import { getAllQuestions, getQuestionCategories } from "./question-utils.js";
+import { getAllQuestions, getQuestionMode, getQuestionModes } from "./question-utils.js";
 import {
   applyA11yState,
   createPerson,
@@ -21,7 +21,7 @@ const elements = {
   addPerson: byId("add-person"),
   peopleList: byId("people-list"),
   personSelect: byId("person-select"),
-  categoryFilter: byId("category-filter"),
+  modeSelect: byId("mode-select"),
   questionList: byId("question-list"),
   progressText: byId("progress-text"),
   exportJson: byId("export-json"),
@@ -114,30 +114,34 @@ function renderPersonSelect() {
   elements.personSelect.disabled = !state.people.length;
 }
 
-function renderCategoryFilter() {
-  elements.categoryFilter.innerHTML = "";
-  elements.categoryFilter.appendChild(createOption("all", "すべて", true));
-  getQuestionCategories(state).forEach((category) => {
-    elements.categoryFilter.appendChild(createOption(category, category, false));
+function renderModeSelect() {
+  const modes = getQuestionModes();
+  const current = getQuestionMode(state);
+  elements.modeSelect.innerHTML = "";
+  const labels = {
+    [modes.simple]: "簡易モード (10問)",
+    [modes.detailed]: "詳細モード (60問)",
+  };
+  Object.values(modes).forEach((mode) => {
+    elements.modeSelect.appendChild(createOption(mode, labels[mode] || mode, mode === current));
   });
 }
 
 function renderQuestions() {
   elements.questionList.innerHTML = "";
+  const questions = getAllQuestions(state);
+  const questionIds = questions.map((q) => q.id);
   if (!currentPersonId) {
     const empty = document.createElement("p");
     empty.className = "small";
     empty.textContent = "先に対象の人を選択してください。";
     elements.questionList.appendChild(empty);
-    elements.progressText.textContent = `回答: 0/${getAllQuestions(state).length}`;
+    elements.progressText.textContent = `回答: 0/${questions.length}`;
     return;
   }
-  const filter = elements.categoryFilter.value;
-  const allQuestions = getAllQuestions(state);
-  const selectedQuestions = filter === "all" ? allQuestions : allQuestions.filter((q) => q.category === filter);
   ensureRatingsForPerson(state, currentPersonId);
 
-  selectedQuestions.forEach((question) => {
+  questions.forEach((question) => {
     const item = document.createElement("div");
     item.className = "question-item";
     const title = document.createElement("h4");
@@ -181,13 +185,14 @@ function renderQuestions() {
     elements.questionList.appendChild(item);
   });
 
-  updateProgress();
+  updateProgress(questionIds);
 }
 
-function updateProgress() {
+function updateProgress(questionIds = null) {
   if (!currentPersonId) return;
-  const answered = getAnsweredCount(state, currentPersonId);
-  elements.progressText.textContent = `回答: ${answered}/${getAllQuestions(state).length}`;
+  const ids = questionIds || getAllQuestions(state).map((q) => q.id);
+  const answered = getAnsweredCount(state, currentPersonId, ids);
+  elements.progressText.textContent = `回答: ${answered}/${ids.length}`;
 }
 
 function addPerson() {
@@ -220,7 +225,11 @@ function bindEvents() {
     renderQuestions();
     persist();
   });
-  elements.categoryFilter.addEventListener("change", renderQuestions);
+  elements.modeSelect.addEventListener("change", () => {
+    state.settings.questionMode = elements.modeSelect.value;
+    renderQuestions();
+    persist();
+  });
   elements.exportJson.addEventListener("click", () => exportState(state));
   elements.importJson.addEventListener("change", async (event) => {
     const file = event.target.files?.[0];
@@ -239,6 +248,7 @@ function bindEvents() {
       state = loadState();
       currentPersonId = state.settings?.lastPersonId || state.people[0]?.id || null;
       applyA11yState(state);
+      renderModeSelect();
       renderPeopleList();
       renderPersonSelect();
       renderQuestions();
@@ -251,7 +261,7 @@ function bindEvents() {
   });
 }
 
-renderCategoryFilter();
+renderModeSelect();
 renderPeopleList();
 renderPersonSelect();
 renderQuestions();

@@ -1,34 +1,50 @@
-import { QUESTIONS } from "./questions.js";
+import { QUESTIONS, QUESTION_BY_ID, SIMPLE_QUESTION_IDS } from "./questions.js";
 
-export function getAllQuestions(state) {
+const QUESTION_MODES = {
+  simple: "simple",
+  detailed: "detailed",
+};
+
+function normalizeQuestionMode(mode) {
+  return mode === QUESTION_MODES.detailed ? QUESTION_MODES.detailed : QUESTION_MODES.simple;
+}
+
+export function getQuestionMode(state) {
+  return normalizeQuestionMode(state?.settings?.questionMode);
+}
+
+export function getBaseQuestions(mode) {
+  const normalized = normalizeQuestionMode(mode);
+  if (normalized === QUESTION_MODES.detailed) {
+    return QUESTIONS;
+  }
+  return SIMPLE_QUESTION_IDS.map((id) => QUESTION_BY_ID[id]).filter(Boolean);
+}
+
+export function getAllQuestions(state, modeOverride = null) {
+  const base = getBaseQuestions(modeOverride ?? getQuestionMode(state));
   const custom = Array.isArray(state?.customQuestions) ? state.customQuestions : [];
   const normalizedCustom = custom
     .filter((q) => q && q.id && q.text)
     .map((q) => ({
       id: q.id,
       text: q.text,
-      category: q.category || "Custom",
       weight: Number.isFinite(q.weight) ? q.weight : 1.0,
       custom: true,
     }));
-  return [...QUESTIONS, ...normalizedCustom];
+  return [...base, ...normalizedCustom];
 }
 
-export function getQuestionCategories(state) {
-  const categories = new Set();
-  getAllQuestions(state).forEach((q) => {
-    if (q.category) categories.add(q.category);
-  });
-  return Array.from(categories);
-}
-
-export function createCustomQuestion(text, category) {
+export function createCustomQuestion(text) {
   const id = `U${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`.toUpperCase();
   return {
     id,
     text: String(text || "").trim(),
-    category: String(category || "Custom").trim() || "Custom",
     weight: 1.0,
     custom: true,
   };
+}
+
+export function getQuestionModes() {
+  return { ...QUESTION_MODES };
 }

@@ -11,6 +11,7 @@ export function createDefaultState() {
     customQuestions: [],
     settings: {
       selfPersonId: null,
+      questionMode: "simple",
       weights,
       viz: {
         labels: true,
@@ -66,6 +67,12 @@ function mergeState(base, incoming) {
     ...base.settings,
     ...(incoming?.settings || {}),
   };
+  const incomingMode = incoming?.settings?.questionMode;
+  if (incomingMode === "simple" || incomingMode === "detailed") {
+    state.settings.questionMode = incomingMode;
+  } else {
+    state.settings.questionMode = base.settings.questionMode;
+  }
   state.settings.viz = { ...base.settings.viz, ...(incoming?.settings?.viz || {}) };
   state.settings.analysis = { ...base.settings.analysis, ...(incoming?.settings?.analysis || {}) };
   state.settings.weights = { ...base.settings.weights, ...(incoming?.settings?.weights || {}) };
@@ -121,9 +128,17 @@ export function getRating(state, personId, questionId) {
   return state.ratings?.[personId]?.[questionId] ?? null;
 }
 
-export function getAnsweredCount(state, personId) {
+export function getAnsweredCount(state, personId, questionIds = null) {
   const ratings = state.ratings?.[personId] || {};
-  return Object.values(ratings).filter((v) => v === 0 || v === 1 || v === -1).length;
+  const ids = Array.isArray(questionIds) ? questionIds : Object.keys(ratings);
+  let count = 0;
+  ids.forEach((qid) => {
+    const v = ratings[qid];
+    if (v === 0 || v === 1 || v === -1) {
+      count += 1;
+    }
+  });
+  return count;
 }
 
 export function applyA11yState(state) {

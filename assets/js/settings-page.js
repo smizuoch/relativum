@@ -14,7 +14,6 @@ const elements = {
   stabilityWins: byId("stability-wins"),
   participationScaling: byId("participation-scaling"),
   customQuestionText: byId("custom-question-text"),
-  customQuestionCategory: byId("custom-question-category"),
   addCustomQuestion: byId("add-custom-question"),
   customQuestionsList: byId("custom-questions-list"),
   weightsList: byId("weights-list"),
@@ -44,7 +43,7 @@ function renderWeights() {
     const row = document.createElement("div");
     row.className = "person-row";
     const label = document.createElement("div");
-    label.innerHTML = `<strong>${question.id}</strong> ${question.text}<div class="small">${question.category}</div>`;
+    label.innerHTML = `<strong>${question.id}</strong> ${question.text}`;
 
     const inputWrap = document.createElement("div");
     const input = document.createElement("input");
@@ -90,18 +89,7 @@ function renderCustomQuestions() {
       persist();
       renderWeights();
     });
-    const categoryInput = document.createElement("input");
-    categoryInput.type = "text";
-    categoryInput.value = question.category || "";
-    categoryInput.placeholder = "カテゴリ";
-    categoryInput.setAttribute("aria-label", `${question.id} カテゴリ`);
-    categoryInput.addEventListener("input", () => {
-      question.category = categoryInput.value;
-      persist();
-      renderWeights();
-    });
     fields.appendChild(textInput);
-    fields.appendChild(categoryInput);
 
     const actions = document.createElement("div");
     actions.className = "row-actions";
@@ -166,12 +154,11 @@ function bindEvents() {
   elements.addCustomQuestion.addEventListener("click", () => {
     const text = elements.customQuestionText.value.trim();
     if (!text) return;
-    const question = createCustomQuestion(text, elements.customQuestionCategory.value.trim());
+    const question = createCustomQuestion(text);
     state.customQuestions = Array.isArray(state.customQuestions) ? state.customQuestions : [];
     state.customQuestions.push(question);
     state.settings.weights[question.id] = 1;
     elements.customQuestionText.value = "";
-    elements.customQuestionCategory.value = "";
     persist();
     renderCustomQuestions();
     renderWeights();

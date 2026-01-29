@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="60の設問で相対的な位置関係を可視化するための、個人向けプライベートツール。" />
+  <meta name="description" content="簡易10問・詳細60問で相対的な位置関係を可視化するための、個人向けプライベートツール。" />
   <meta property="og:title" content="Relativum - 登録と評価" />
-  <meta property="og:description" content="60の設問で相対的な位置関係を可視化するための、個人向けプライベートツール。" />
+  <meta property="og:description" content="簡易10問・詳細60問で相対的な位置関係を可視化するための、個人向けプライベートツール。" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://relativum.me/" />
   <meta property="og:site_name" content="Relativum" />
@@ -14,7 +14,7 @@
   <meta property="og:image:alt" content="Relativum" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Relativum - 登録と評価" />
-  <meta name="twitter:description" content="60の設問で相対的な位置関係を可視化するための、個人向けプライベートツール。" />
+  <meta name="twitter:description" content="簡易10問・詳細60問で相対的な位置関係を可視化するための、個人向けプライベートツール。" />
   <meta name="twitter:image" content="https://relativum.me/images/Relativum.png" />
   <meta name="twitter:image:alt" content="Relativum" />
   <title>Relativum - 登録と評価</title>
@@ -26,7 +26,7 @@
 <body>
   <header>
     <h1>Relativum</h1>
-    <p>60の設問で相対的な位置関係を可視化するための、個人向けプライベートツール。</p>
+    <p>簡易10問・詳細60問で相対的な位置関係を可視化するための、個人向けプライベートツール。</p>
     <nav>
       <a class="active" href="index.html">登録</a>
       <a href="viz.html">可視化</a>
@@ -51,10 +51,10 @@
       <div class="controls-row">
         <label for="person-select">対象の人</label>
         <select id="person-select"></select>
-        <label for="category-filter">カテゴリ</label>
-        <select id="category-filter"></select>
+        <label for="mode-select">モード</label>
+        <select id="mode-select"></select>
       </div>
-      <p class="small" id="progress-text">回答: 0/60</p>
+      <p class="small" id="progress-text">回答: 0/10</p>
       <div id="question-list" class="question-list"></div>
       <div class="controls-row" style="margin-top: 12px;">
         <button id="export-json" class="secondary">Export JSON</button>
