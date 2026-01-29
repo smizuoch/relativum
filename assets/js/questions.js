@@ -34,7 +34,31 @@ export const QUESTIONS = [
   { id: "Q33", category: "Boundaries & Distance", text: "この人は、お金の貸し借りは避けたい", weight: 1.0 },
   { id: "Q34", category: "Boundaries & Distance", text: "この人は、必要なら貸し借りもありだと思う", weight: 1.0 },
   { id: "Q35", category: "Boundaries & Distance", text: "この人は、価値観が違っても仲良くできる", weight: 1.0 },
-  { id: "Q36", category: "Boundaries & Distance", text: "この人は、価値観が合わないと距離を置きがちだ", weight: 1.0 }
+  { id: "Q36", category: "Boundaries & Distance", text: "この人は、価値観が合わないと距離を置きがちだ", weight: 1.0 },
+  { id: "Q37", category: "Creativity & Making", text: "この人は、何かを「作る」こと自体に強い喜びを感じる", weight: 1.0 },
+  { id: "Q38", category: "Creativity & Making", text: "この人は、完成度よりまず「新しい試み」を優先しがちだ", weight: 1.0 },
+  { id: "Q39", category: "Creativity & Making", text: "この人は、独自の表現のためなら手間が増えてもいいと思う", weight: 1.0 },
+  { id: "Q40", category: "Creativity & Making", text: "この人は、既製品やテンプレより自作・カスタムを選びがちだ", weight: 1.0 },
+  { id: "Q41", category: "Creativity & Making", text: "この人は、アイデアを出すより仕上げ（完成）までやり切るタイプだ", weight: 1.0 },
+  { id: "Q42", category: "Creativity & Making", text: "この人は、模倣やオマージュよりオリジナル性を重視する", weight: 1.0 },
+  { id: "Q43", category: "Creativity & Making", text: "この人は、作品や表現に「テーマ」や「思想」を込めたい", weight: 1.0 },
+  { id: "Q44", category: "Creativity & Making", text: "この人は、評価されなくても作り続けられるほうだ", weight: 1.0 },
+  { id: "Q45", category: "Independence & Nonconformity", text: "この人は、多数派の意見でも納得できなければ従わない", weight: 1.0 },
+  { id: "Q46", category: "Independence & Nonconformity", text: "この人は、周囲と違う意見を言うことに抵抗が少ない", weight: 1.0 },
+  { id: "Q47", category: "Independence & Nonconformity", text: "この人は、ルールや慣習は「理由があれば破ってもよい」と考える", weight: 1.0 },
+  { id: "Q48", category: "Independence & Nonconformity", text: "この人は、所属や肩書きより個人の判断を重視する", weight: 1.0 },
+  { id: "Q49", category: "Independence & Nonconformity", text: "この人は、権威や実績のある意見を優先して信じがちだ（逆向き）", weight: 1.0 },
+  { id: "Q50", category: "Independence & Nonconformity", text: "この人は、目立たないように周囲に合わせるほうだ（逆向き）", weight: 1.0 },
+  { id: "Q51", category: "Independence & Nonconformity", text: "この人は、他人の評価より自分の基準で動く", weight: 1.0 },
+  { id: "Q52", category: "Independence & Nonconformity", text: "この人は、周囲の期待に応えることを優先する（逆向き）", weight: 1.0 },
+  { id: "Q53", category: "Different Perspective", text: "この人は、物事を「普通と違う切り口」で捉えることが多い", weight: 1.0 },
+  { id: "Q54", category: "Different Perspective", text: "この人は、会話で「みんなが見落としている点」を拾いがちだ", weight: 1.0 },
+  { id: "Q55", category: "Different Perspective", text: "この人は、正解より「別の可能性」を探すのが好きだ", weight: 1.0 },
+  { id: "Q56", category: "Different Perspective", text: "この人は、既存の枠組みを疑って定義から考え直したい", weight: 1.0 },
+  { id: "Q57", category: "Aesthetic & Sensitivity", text: "この人は、実用性より「美しさ・雰囲気」を優先することがある", weight: 1.0 },
+  { id: "Q58", category: "Aesthetic & Sensitivity", text: "この人は、音・色・配置などの“微妙な違い”に敏感だ", weight: 1.0 },
+  { id: "Q59", category: "Aesthetic & Sensitivity", text: "この人は、場や空間の空気感（居心地）を重視する", weight: 1.0 },
+  { id: "Q60", category: "Aesthetic & Sensitivity", text: "この人は、刺激が強い環境より落ち着いた環境を好む", weight: 1.0 }
 ];
 
 export const QUESTION_CATEGORIES = [
@@ -42,7 +66,11 @@ export const QUESTION_CATEGORIES = [
   "Conflict & Decisions",
   "Work & Collaboration",
   "Schedule & Commitments",
-  "Boundaries & Distance"
+  "Boundaries & Distance",
+  "Creativity & Making",
+  "Independence & Nonconformity",
+  "Different Perspective",
+  "Aesthetic & Sensitivity"
 ];
 
 export const QUESTION_BY_ID = Object.fromEntries(QUESTIONS.map((q) => [q.id, q]));

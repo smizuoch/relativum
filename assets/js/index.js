@@ -129,9 +129,9 @@ function renderQuestions() {
     empty.className = "small";
     empty.textContent = "先に対象の人を選択してください。";
     elements.questionList.appendChild(empty);
-    elements.progressText.textContent = "回答: 0/36";
-    return;
-  }
+      elements.progressText.textContent = `回答: 0/${QUESTIONS.length}`;
+      return;
+    }
   const filter = elements.categoryFilter.value;
   const selectedQuestions = filter === "all" ? QUESTIONS : QUESTIONS.filter((q) => q.category === filter);
   ensureRatingsForPerson(state, currentPersonId);
@@ -186,7 +186,7 @@ function renderQuestions() {
 function updateProgress() {
   if (!currentPersonId) return;
   const answered = getAnsweredCount(state, currentPersonId);
-  elements.progressText.textContent = `回答: ${answered}/36`;
+  elements.progressText.textContent = `回答: ${answered}/${QUESTIONS.length}`;
 }
 
 function addPerson() {

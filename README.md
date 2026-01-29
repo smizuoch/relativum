@@ -3,7 +3,7 @@
 Relativum is a 100% static, private questionnaire tool for mapping people onto a relative space using a Polis-style PCA + clustering pipeline. Everything runs locally in the browser (no server, no Node.js).
 
 ## Features
-- Register people (A, B, C…), answer 36 fixed questions per person
+- Register people (A, B, C…), answer 60 fixed questions per person
 - Autosave to `localStorage`
 - Export/import JSON
 - 3D (PC1/PC2/PC3) and 2D projections + accessible table
