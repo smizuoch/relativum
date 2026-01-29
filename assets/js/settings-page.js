@@ -1,4 +1,4 @@
-import { QUESTIONS } from "./questions.js";
+import { getAllQuestions, createCustomQuestion } from "./question-utils.js";
 import { applyA11yState, loadState, resetState, saveState } from "./app-state.js";
 import { byId, createOption } from "./ui.js";
 
@@ -13,6 +13,10 @@ const elements = {
   minAnswers: byId("min-answers"),
   stabilityWins: byId("stability-wins"),
   participationScaling: byId("participation-scaling"),
+  customQuestionText: byId("custom-question-text"),
+  customQuestionCategory: byId("custom-question-category"),
+  addCustomQuestion: byId("add-custom-question"),
+  customQuestionsList: byId("custom-questions-list"),
   weightsList: byId("weights-list"),
   resetData: byId("reset-data"),
 };
@@ -34,7 +38,9 @@ function renderSelfSelect() {
 
 function renderWeights() {
   elements.weightsList.innerHTML = "";
-  QUESTIONS.forEach((question) => {
+  const questions = getAllQuestions(state);
+  elements.minAnswers.max = String(questions.length);
+  questions.forEach((question) => {
     const row = document.createElement("div");
     row.className = "person-row";
     const label = document.createElement("div");
@@ -58,6 +64,63 @@ function renderWeights() {
     row.appendChild(label);
     row.appendChild(inputWrap);
     elements.weightsList.appendChild(row);
+  });
+}
+
+function renderCustomQuestions() {
+  elements.customQuestionsList.innerHTML = "";
+  const custom = Array.isArray(state.customQuestions) ? state.customQuestions : [];
+  if (!custom.length) {
+    const empty = document.createElement("p");
+    empty.className = "small";
+    empty.textContent = "カスタム質問はまだありません。";
+    elements.customQuestionsList.appendChild(empty);
+    return;
+  }
+  custom.forEach((question) => {
+    const row = document.createElement("div");
+    row.className = "person-row";
+    const fields = document.createElement("div");
+    const textInput = document.createElement("input");
+    textInput.type = "text";
+    textInput.value = question.text;
+    textInput.setAttribute("aria-label", `${question.id} 質問文`);
+    textInput.addEventListener("input", () => {
+      question.text = textInput.value;
+      persist();
+      renderWeights();
+    });
+    const categoryInput = document.createElement("input");
+    categoryInput.type = "text";
+    categoryInput.value = question.category || "";
+    categoryInput.placeholder = "カテゴリ";
+    categoryInput.setAttribute("aria-label", `${question.id} カテゴリ`);
+    categoryInput.addEventListener("input", () => {
+      question.category = categoryInput.value;
+      persist();
+      renderWeights();
+    });
+    fields.appendChild(textInput);
+    fields.appendChild(categoryInput);
+
+    const actions = document.createElement("div");
+    actions.className = "row-actions";
+    const removeButton = document.createElement("button");
+    removeButton.className = "secondary";
+    removeButton.textContent = "削除";
+    removeButton.addEventListener("click", () => {
+      if (!confirm("このカスタム質問を削除しますか？")) return;
+      state.customQuestions = custom.filter((q) => q.id !== question.id);
+      delete state.settings.weights[question.id];
+      persist();
+      renderCustomQuestions();
+      renderWeights();
+    });
+    actions.appendChild(removeButton);
+
+    row.appendChild(fields);
+    row.appendChild(actions);
+    elements.customQuestionsList.appendChild(row);
   });
 }
 
@@ -100,6 +163,26 @@ function bindEvents() {
     persist();
   });
 
+  elements.addCustomQuestion.addEventListener("click", () => {
+    const text = elements.customQuestionText.value.trim();
+    if (!text) return;
+    const question = createCustomQuestion(text, elements.customQuestionCategory.value.trim());
+    state.customQuestions = Array.isArray(state.customQuestions) ? state.customQuestions : [];
+    state.customQuestions.push(question);
+    state.settings.weights[question.id] = 1;
+    elements.customQuestionText.value = "";
+    elements.customQuestionCategory.value = "";
+    persist();
+    renderCustomQuestions();
+    renderWeights();
+  });
+
+  elements.customQuestionText.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      elements.addCustomQuestion.click();
+    }
+  });
+
   elements.resetData.addEventListener("click", () => {
     if (!confirm("ローカルデータをすべて削除しますか？")) return;
     resetState();
@@ -117,6 +200,7 @@ function initControls() {
 }
 
 renderSelfSelect();
+renderCustomQuestions();
 renderWeights();
 initControls();
 bindEvents();

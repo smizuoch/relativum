@@ -1,4 +1,4 @@
-import { QUESTIONS, QUESTION_CATEGORIES } from "./questions.js";
+import { getAllQuestions, getQuestionCategories } from "./question-utils.js";
 import {
   applyA11yState,
   createPerson,
@@ -117,7 +117,7 @@ function renderPersonSelect() {
 function renderCategoryFilter() {
   elements.categoryFilter.innerHTML = "";
   elements.categoryFilter.appendChild(createOption("all", "すべて", true));
-  QUESTION_CATEGORIES.forEach((category) => {
+  getQuestionCategories(state).forEach((category) => {
     elements.categoryFilter.appendChild(createOption(category, category, false));
   });
 }
@@ -129,11 +129,12 @@ function renderQuestions() {
     empty.className = "small";
     empty.textContent = "先に対象の人を選択してください。";
     elements.questionList.appendChild(empty);
-      elements.progressText.textContent = `回答: 0/${QUESTIONS.length}`;
-      return;
-    }
+    elements.progressText.textContent = `回答: 0/${getAllQuestions(state).length}`;
+    return;
+  }
   const filter = elements.categoryFilter.value;
-  const selectedQuestions = filter === "all" ? QUESTIONS : QUESTIONS.filter((q) => q.category === filter);
+  const allQuestions = getAllQuestions(state);
+  const selectedQuestions = filter === "all" ? allQuestions : allQuestions.filter((q) => q.category === filter);
   ensureRatingsForPerson(state, currentPersonId);
 
   selectedQuestions.forEach((question) => {
@@ -186,7 +187,7 @@ function renderQuestions() {
 function updateProgress() {
   if (!currentPersonId) return;
   const answered = getAnsweredCount(state, currentPersonId);
-  elements.progressText.textContent = `回答: ${answered}/${QUESTIONS.length}`;
+  elements.progressText.textContent = `回答: ${answered}/${getAllQuestions(state).length}`;
 }
 
 function addPerson() {

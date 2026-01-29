@@ -50,6 +50,17 @@
       </label>
     </section>
 
+    <section class="card">
+      <h2>カスタム質問</h2>
+      <div class="controls-row">
+        <input id="custom-question-text" type="text" placeholder="質問文" />
+        <input id="custom-question-category" type="text" placeholder="カテゴリ (任意)" />
+        <button id="add-custom-question">追加</button>
+      </div>
+      <p class="small">ローカルに保存され、分析に含まれます。</p>
+      <div id="custom-questions-list" class="list"></div>
+    </section>
+
     <section class="card" style="grid-column: 1 / -1;">
       <h2>設問の重み (0〜2)</h2>
       <div id="weights-list" class="list"></div>

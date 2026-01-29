@@ -1,15 +1,16 @@
-import { QUESTIONS } from "./questions.js";
+import { getAllQuestions } from "./question-utils.js";
 
 const MAX_KMEANS_ITER = 50;
 
 export function runAnalysis(state) {
   const people = state.people || [];
+  const questions = getAllQuestions(state);
   const weights = state.settings?.weights || {};
   const minAnswers = Number(state.settings?.analysis?.minAnswers ?? 7);
   const participationScaling = !!state.settings?.analysis?.participationScaling;
   const stabilityWins = Number(state.settings?.analysis?.stabilityWins ?? 4);
 
-  const questionIds = QUESTIONS.map((q) => q.id);
+  const questionIds = questions.map((q) => q.id);
   const included = [];
   const excluded = [];
   const rawMatrix = [];
@@ -36,13 +37,13 @@ export function runAnalysis(state) {
   }
 
   const matrix = rawMatrix.map((row) => row.slice());
-  const colMeans = computeColumnMeans(matrix);
+  const colMeans = computeColumnMeans(matrix, questionIds.length);
   const imputed = matrix.map((row) =>
     row.map((value, idx) => (Number.isNaN(value) ? colMeans[idx] : value))
   );
 
   const centered = imputed.map((row) => row.slice());
-  const finalMeans = computeColumnMeans(centered);
+  const finalMeans = computeColumnMeans(centered, questionIds.length);
   const appliedWeights = questionIds.map((qid) => Number(weights[qid] ?? 1.0));
 
   for (let i = 0; i < centered.length; i += 1) {
@@ -94,9 +95,9 @@ export function translateToSelf(coords, people, selfPersonId) {
   return coords.map((row) => row.map((value, dim) => value - origin[dim]));
 }
 
-function computeColumnMeans(matrix) {
+function computeColumnMeans(matrix, columnCount = 0) {
   if (matrix.length === 0) {
-    return Array(QUESTIONS.length).fill(0);
+    return Array(columnCount).fill(0);
   }
   const cols = matrix[0].length;
   const sums = Array(cols).fill(0);

@@ -9,6 +9,7 @@ Relativum is a 100% static, private questionnaire tool for mapping people onto a
 - 3D (PC1/PC2/PC3) and 2D projections + accessible table
 - Nearest-people view with distance metrics
 - Adjustable weights and accessibility settings
+- Add custom local questions (stored in your browser)
 
 ## Run locally
 Any static server works. Example:

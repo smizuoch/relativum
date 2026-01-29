@@ -8,6 +8,7 @@ export function createDefaultState() {
     version: 1,
     people: [],
     ratings: {},
+    customQuestions: [],
     settings: {
       selfPersonId: null,
       weights,
@@ -60,6 +61,7 @@ function mergeState(base, incoming) {
   const state = { ...base, ...incoming };
   state.people = Array.isArray(incoming?.people) ? incoming.people : base.people;
   state.ratings = typeof incoming?.ratings === "object" && incoming.ratings ? incoming.ratings : base.ratings;
+  state.customQuestions = Array.isArray(incoming?.customQuestions) ? incoming.customQuestions : base.customQuestions;
   state.settings = {
     ...base.settings,
     ...(incoming?.settings || {}),
@@ -76,6 +78,10 @@ function mergeState(base, incoming) {
   // Ensure all weights exist and are numeric.
   for (const q of QUESTIONS) {
     const value = Number(state.settings.weights[q.id]);
+    state.settings.weights[q.id] = Number.isFinite(value) ? value : 1.0;
+  }
+  for (const q of state.customQuestions || []) {
+    const value = Number(state.settings.weights?.[q.id]);
     state.settings.weights[q.id] = Number.isFinite(value) ? value : 1.0;
   }
 

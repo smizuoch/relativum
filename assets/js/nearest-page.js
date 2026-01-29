@@ -1,6 +1,6 @@
 import { loadState, saveState, applyA11yState } from "./app-state.js";
 import { runAnalysis } from "./analysis.js";
-import { QUESTIONS } from "./questions.js";
+import { getAllQuestions } from "./question-utils.js";
 import { byId, createOption, formatNumber } from "./ui.js";
 
 let state = loadState();
@@ -69,7 +69,7 @@ function distanceRaw(personId, referenceId) {
   const ratingsB = state.ratings?.[referenceId] || {};
   let sum = 0;
   let count = 0;
-  QUESTIONS.forEach((q) => {
+  getAllQuestions(state).forEach((q) => {
     const a = ratingsA[q.id];
     const b = ratingsB[q.id];
     if ((a === 1 || a === 0 || a === -1) && (b === 1 || b === 0 || b === -1)) {
@@ -88,7 +88,7 @@ function highlightDifferences(personId, referenceId) {
   const ratingsA = state.ratings?.[personId] || {};
   const ratingsB = state.ratings?.[referenceId] || {};
   const diffs = [];
-  QUESTIONS.forEach((q) => {
+  getAllQuestions(state).forEach((q) => {
     const a = ratingsA[q.id];
     const b = ratingsB[q.id];
     if ((a === 1 || a === 0 || a === -1) && (b === 1 || b === 0 || b === -1)) {
