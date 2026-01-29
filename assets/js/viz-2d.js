@@ -43,7 +43,9 @@ export function draw2DScatter(canvas, points, options = {}) {
   const originX = padding + (0 - minX) * scaleX;
   const originY = height - (padding + (0 - minY) * scaleY);
 
-  ctx.strokeStyle = options.highContrast ? "#111" : "#3b3b3b";
+  const axisColor = options.highContrast ? "#111" : readCssVar("--viz-axis", "#3b3b3b");
+  const labelColor = options.highContrast ? "#111" : readCssVar("--viz-label", "#222");
+  ctx.strokeStyle = axisColor;
   ctx.lineWidth = 1;
   ctx.setLineDash([4, 4]);
   ctx.beginPath();
@@ -61,7 +63,7 @@ export function draw2DScatter(canvas, points, options = {}) {
     const size = options.pointSize || 6;
     drawShape(ctx, point.shape, x, y, size, color, options.highContrast);
     if (options.showLabels) {
-      ctx.fillStyle = options.highContrast ? "#111" : "#222";
+      ctx.fillStyle = labelColor;
       ctx.font = "12px 'IBM Plex Sans JP', 'Noto Sans JP', sans-serif";
       ctx.fillText(point.label, x + 6, y - 6);
     }
@@ -119,9 +121,14 @@ function drawShape(ctx, shape, x, y, size, color, highContrast) {
 }
 
 function drawEmptyState(ctx, width, height, message) {
-  ctx.fillStyle = "#666";
+  ctx.fillStyle = readCssVar("--viz-empty", "#666");
   ctx.font = "14px 'IBM Plex Sans JP', 'Noto Sans JP', sans-serif";
   ctx.textAlign = "center";
   ctx.fillText(message, width / 2, height / 2);
   ctx.textAlign = "left";
+}
+
+function readCssVar(name, fallback) {
+  const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return value || fallback;
 }

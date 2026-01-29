@@ -13,6 +13,9 @@
   --notice-bg: #fff6d6;
   --notice-border: #f1d18b;
   --canvas-bg: #ffffff;
+  --viz-axis: #3b3b3b;
+  --viz-label: #2b2623;
+  --viz-empty: #6a6560;
   --bg-gradient-spot: #fff7ea;
   --bg-gradient-overlay: rgba(15, 93, 94, 0.08);
   --radius: 14px;
@@ -36,6 +39,9 @@
     --notice-bg: #3b2e17;
     --notice-border: #8a6a2b;
     --canvas-bg: #171411;
+    --viz-axis: #8f8a83;
+    --viz-label: #efe7dd;
+    --viz-empty: #a39b92;
     --bg-gradient-spot: #1b1714;
     --bg-gradient-overlay: rgba(47, 143, 144, 0.18);
     color-scheme: dark;
@@ -57,6 +63,9 @@
   --notice-bg: #fff6d6;
   --notice-border: #f1d18b;
   --canvas-bg: #ffffff;
+  --viz-axis: #3b3b3b;
+  --viz-label: #2b2623;
+  --viz-empty: #6a6560;
   --bg-gradient-spot: #fff7ea;
   --bg-gradient-overlay: rgba(15, 93, 94, 0.08);
   color-scheme: light;
@@ -77,6 +86,9 @@
   --notice-bg: #3b2e17;
   --notice-border: #8a6a2b;
   --canvas-bg: #171411;
+  --viz-axis: #8f8a83;
+  --viz-label: #efe7dd;
+  --viz-empty: #a39b92;
   --bg-gradient-spot: #1b1714;
   --bg-gradient-overlay: rgba(47, 143, 144, 0.18);
   color-scheme: dark;
@@ -111,6 +123,9 @@ body.high-contrast {
   --notice-bg: #fff6d6;
   --notice-border: #f1d18b;
   --canvas-bg: #ffffff;
+  --viz-axis: #111111;
+  --viz-label: #000000;
+  --viz-empty: #1a1a1a;
   --bg-gradient-spot: #ffffff;
   --bg-gradient-overlay: rgba(0, 0, 0, 0);
   color-scheme: light;
