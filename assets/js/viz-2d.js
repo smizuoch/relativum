@@ -25,10 +25,18 @@ export function draw2DScatter(canvas, points, options = {}) {
   const padding = 40;
   const xs = points.map((p) => p.x);
   const ys = points.map((p) => p.y);
-  const minX = Math.min(...xs);
-  const maxX = Math.max(...xs);
-  const minY = Math.min(...ys);
-  const maxY = Math.max(...ys);
+  let minX = Math.min(...xs);
+  let maxX = Math.max(...xs);
+  let minY = Math.min(...ys);
+  let maxY = Math.max(...ys);
+  if (options.centerOnOrigin) {
+    const maxAbsX = Math.max(Math.abs(minX), Math.abs(maxX), 1);
+    const maxAbsY = Math.max(Math.abs(minY), Math.abs(maxY), 1);
+    minX = -maxAbsX;
+    maxX = maxAbsX;
+    minY = -maxAbsY;
+    maxY = maxAbsY;
+  }
   const scaleX = (width - padding * 2) / (maxX - minX || 1);
   const scaleY = (height - padding * 2) / (maxY - minY || 1);
 

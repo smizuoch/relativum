@@ -138,7 +138,14 @@ function renderViz() {
     cluster: p.cluster,
     shape: p.shape,
   }));
-  draw2DScatter(elements.canvas2d, data, { showLabels, pointSize, highContrast });
+  const centerOnOrigin =
+    !!state.settings.selfPersonId && points.some((p) => p.id === state.settings.selfPersonId);
+  draw2DScatter(elements.canvas2d, data, {
+    showLabels,
+    pointSize,
+    highContrast,
+    centerOnOrigin,
+  });
 }
 
 function downloadAnalysis() {
