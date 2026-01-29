@@ -18,6 +18,7 @@ export function createDefaultState() {
         pointSize: 6,
         reduceMotion: false,
         highContrast: false,
+        theme: "system",
         fontScale: 1,
       },
       analysis: {
@@ -100,6 +101,10 @@ function mergeState(base, incoming) {
     }
   });
 
+  if (!["system", "light", "dark"].includes(state.settings.viz.theme)) {
+    state.settings.viz.theme = base.settings.viz.theme;
+  }
+
   return state;
 }
 
@@ -142,9 +147,14 @@ export function getAnsweredCount(state, personId, questionIds = null) {
 }
 
 export function applyA11yState(state) {
-  const { reduceMotion, highContrast, fontScale } = state.settings.viz;
+  const { reduceMotion, highContrast, fontScale, theme } = state.settings.viz;
   const root = document.documentElement;
   root.style.setProperty("--font-scale", String(fontScale || 1));
   document.body.classList.toggle("reduce-motion", !!reduceMotion);
   document.body.classList.toggle("high-contrast", !!highContrast);
+  if (theme === "light" || theme === "dark") {
+    root.dataset.theme = theme;
+  } else {
+    delete root.dataset.theme;
+  }
 }

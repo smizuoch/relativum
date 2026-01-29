@@ -2,14 +2,84 @@
   --bg: #f7f3ed;
   --bg-accent: #e8f0ef;
   --surface: #ffffff;
+  --surface-alt: #fffdfa;
   --ink: #1f1a16;
   --muted: #5d5a58;
   --accent: #0f5d5e;
   --accent-2: #d95f02;
   --border: #d9d2c7;
   --shadow: rgba(0, 0, 0, 0.08);
+  --focus: #ffbf47;
+  --notice-bg: #fff6d6;
+  --notice-border: #f1d18b;
+  --canvas-bg: #ffffff;
+  --bg-gradient-spot: #fff7ea;
+  --bg-gradient-overlay: rgba(15, 93, 94, 0.08);
   --radius: 14px;
   --font-scale: 1;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14110f;
+    --bg-accent: #1f2624;
+    --surface: #1b1715;
+    --surface-alt: #221d1a;
+    --ink: #f4efe9;
+    --muted: #b7b0a7;
+    --accent: #2f8f90;
+    --accent-2: #f09a4c;
+    --border: #3a332e;
+    --shadow: rgba(0, 0, 0, 0.45);
+    --focus: #ffd06f;
+    --notice-bg: #3b2e17;
+    --notice-border: #8a6a2b;
+    --canvas-bg: #171411;
+    --bg-gradient-spot: #1b1714;
+    --bg-gradient-overlay: rgba(47, 143, 144, 0.18);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="light"] {
+  --bg: #f7f3ed;
+  --bg-accent: #e8f0ef;
+  --surface: #ffffff;
+  --surface-alt: #fffdfa;
+  --ink: #1f1a16;
+  --muted: #5d5a58;
+  --accent: #0f5d5e;
+  --accent-2: #d95f02;
+  --border: #d9d2c7;
+  --shadow: rgba(0, 0, 0, 0.08);
+  --focus: #ffbf47;
+  --notice-bg: #fff6d6;
+  --notice-border: #f1d18b;
+  --canvas-bg: #ffffff;
+  --bg-gradient-spot: #fff7ea;
+  --bg-gradient-overlay: rgba(15, 93, 94, 0.08);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #14110f;
+  --bg-accent: #1f2624;
+  --surface: #1b1715;
+  --surface-alt: #221d1a;
+  --ink: #f4efe9;
+  --muted: #b7b0a7;
+  --accent: #2f8f90;
+  --accent-2: #f09a4c;
+  --border: #3a332e;
+  --shadow: rgba(0, 0, 0, 0.45);
+  --focus: #ffd06f;
+  --notice-bg: #3b2e17;
+  --notice-border: #8a6a2b;
+  --canvas-bg: #171411;
+  --bg-gradient-spot: #1b1714;
+  --bg-gradient-overlay: rgba(47, 143, 144, 0.18);
+  color-scheme: dark;
 }
 
 * {
@@ -20,20 +90,30 @@ body {
   margin: 0;
   font-family: "IBM Plex Sans JP", "Noto Sans JP", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
   color: var(--ink);
-  background: radial-gradient(circle at top left, #fff7ea, var(--bg)) no-repeat,
-    linear-gradient(135deg, rgba(15, 93, 94, 0.08), transparent 60%);
+  background: radial-gradient(circle at top left, var(--bg-gradient-spot), var(--bg)) no-repeat,
+    linear-gradient(135deg, var(--bg-gradient-overlay), transparent 60%);
   font-size: calc(16px * var(--font-scale));
   min-height: 100vh;
 }
 
 body.high-contrast {
   --bg: #ffffff;
+  --bg-accent: #f2f2f2;
   --surface: #ffffff;
+  --surface-alt: #ffffff;
   --ink: #000000;
   --muted: #1a1a1a;
   --accent: #0b3a3a;
   --accent-2: #9a1f00;
   --border: #000000;
+  --shadow: rgba(0, 0, 0, 0.15);
+  --focus: #ffbf47;
+  --notice-bg: #fff6d6;
+  --notice-border: #f1d18b;
+  --canvas-bg: #ffffff;
+  --bg-gradient-spot: #ffffff;
+  --bg-gradient-overlay: rgba(0, 0, 0, 0);
+  color-scheme: light;
   background: #ffffff;
 }
 
@@ -136,7 +216,8 @@ textarea {
   padding: 8px 10px;
   border-radius: 8px;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--surface-alt);
+  color: var(--ink);
 }
 
 button {
@@ -162,7 +243,7 @@ select:focus-visible,
 textarea:focus-visible,
 summary:focus-visible,
 [role="button"]:focus-visible {
-  outline: 3px solid #ffbf47;
+  outline: 3px solid var(--focus);
   outline-offset: 2px;
 }
 
@@ -236,7 +317,7 @@ button:hover {
 .canvas-wrap {
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: #fff;
+  background: var(--canvas-bg);
   padding: 10px;
 }
 
@@ -292,8 +373,8 @@ table th {
 .notice {
   padding: 8px 10px;
   border-radius: 8px;
-  background: #fff6d6;
-  border: 1px solid #f1d18b;
+  background: var(--notice-bg);
+  border: 1px solid var(--notice-border);
 }
 
 .footer {

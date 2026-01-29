@@ -9,6 +9,7 @@ const elements = {
   selfSelect: byId("self-select"),
   reduceMotion: byId("reduce-motion"),
   highContrast: byId("high-contrast"),
+  themeSelect: byId("theme-select"),
   fontScale: byId("font-scale"),
   minAnswers: byId("min-answers"),
   stabilityWins: byId("stability-wins"),
@@ -129,6 +130,12 @@ function bindEvents() {
     persist();
   });
 
+  elements.themeSelect.addEventListener("change", () => {
+    const value = elements.themeSelect.value;
+    state.settings.viz.theme = value === "light" || value === "dark" ? value : "system";
+    persist();
+  });
+
   elements.fontScale.addEventListener("input", () => {
     state.settings.viz.fontScale = Number(elements.fontScale.value);
     persist();
@@ -180,6 +187,7 @@ function bindEvents() {
 function initControls() {
   elements.reduceMotion.checked = !!state.settings.viz.reduceMotion;
   elements.highContrast.checked = !!state.settings.viz.highContrast;
+  elements.themeSelect.value = state.settings.viz.theme || "system";
   elements.fontScale.value = state.settings.viz.fontScale || 1;
   elements.minAnswers.value = state.settings.analysis.minAnswers ?? 7;
   elements.stabilityWins.value = state.settings.analysis.stabilityWins ?? 4;
