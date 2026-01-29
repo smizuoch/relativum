@@ -270,6 +270,9 @@ button:hover {
 .list {
   display: grid;
   gap: 10px;
+  max-height: clamp(360px, 65vh, 640px);
+  overflow: auto;
+  padding-right: 6px;
 }
 
 .person-row {
