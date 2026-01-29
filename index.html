@@ -41,7 +41,13 @@
       <div class="controls-row">
         <input id="new-person-name" type="text" placeholder="名前 (Aさん)" aria-label="新しい人の名前" />
         <button id="add-person">追加</button>
+        <button id="export-json" class="secondary">Export JSON</button>
+        <label class="secondary" style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;">
+          <input id="import-json" type="file" accept="application/json" class="sr-only" />
+          Import JSON
+        </label>
       </div>
+      <p class="small" id="status" role="status" aria-live="polite"></p>
       <p class="small">登録した人はローカルに保存されます。</p>
       <div id="people-list" class="list" aria-live="polite"></div>
     </section>
@@ -56,14 +62,6 @@
       </div>
       <p class="small" id="progress-text">回答: 0/10</p>
       <div id="question-list" class="question-list"></div>
-      <div class="controls-row" style="margin-top: 12px;">
-        <button id="export-json" class="secondary">Export JSON</button>
-        <label class="secondary" style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;">
-          <input id="import-json" type="file" accept="application/json" class="sr-only" />
-          Import JSON
-        </label>
-      </div>
-      <p class="small" id="status" role="status" aria-live="polite"></p>
     </section>
   </main>
 
