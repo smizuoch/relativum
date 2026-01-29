@@ -36,7 +36,7 @@ export function create3DScatter(canvas, options = {}) {
     }
   }
 
-  function project(point) {
+  function project(point, cameraDistance) {
     const [x, y, z] = point;
     const cy = Math.cos(state.yaw);
     const sy = Math.sin(state.yaw);
@@ -48,8 +48,8 @@ export function create3DScatter(canvas, options = {}) {
     const yz = y * cx - zz * sx;
     const zz2 = y * sx + zz * cx;
 
-    const depth = 6;
-    const scale = depth / (depth + zz2 + 6);
+    const depth = Math.max(6, cameraDistance || 6);
+    const scale = depth / (depth * 2 + zz2);
     return {
       x: xz * scale,
       y: yz * scale,
@@ -69,8 +69,11 @@ export function create3DScatter(canvas, options = {}) {
       drawEmptyState(ctx, width, height, "データが不足しています", state.options.highContrast);
       return;
     }
+    const sceneScale = getSceneScale(state.points);
+    const cameraDistance = Math.max(6, sceneScale * 2);
+    const projectPoint = (coords) => project(coords, cameraDistance);
     const projected = state.points.map((p) => {
-      const proj = project(p.coords);
+      const proj = projectPoint(p.coords);
       return { ...p, proj };
     });
     projected.sort((a, b) => a.proj.z - b.proj.z);
@@ -78,7 +81,6 @@ export function create3DScatter(canvas, options = {}) {
     const zs = projected.map((p) => p.proj.z);
     const minZ = Math.min(...zs);
     const maxZ = Math.max(...zs);
-    const sceneScale = getSceneScale(state.points);
     const baseScale = Math.min(width, height) * 0.35;
     const canvasScale = (baseScale / sceneScale) * (1 / state.zoom);
     const toCanvas = (proj) => ({
@@ -87,14 +89,14 @@ export function create3DScatter(canvas, options = {}) {
     });
 
     if (state.options.showGrid) {
-      drawGrid(ctx, toCanvas, project, sceneScale, state.options.highContrast);
+      drawGrid(ctx, toCanvas, projectPoint, sceneScale, state.options.highContrast);
     }
 
     if (state.options.showAxes) {
-      drawAxes(ctx, toCanvas, project, sceneScale, state.options.highContrast);
+      drawAxes(ctx, toCanvas, projectPoint, sceneScale, state.options.highContrast);
     }
     if (state.options.showOrigin) {
-      drawOrigin(ctx, toCanvas(project([0, 0, 0])), state.options.highContrast);
+      drawOrigin(ctx, toCanvas(projectPoint([0, 0, 0])), state.options.highContrast);
     }
 
     for (const point of projected) {
