@@ -152,8 +152,9 @@ header h1 {
   letter-spacing: 0.02em;
 }
 
-header .brand {
-  color: inherit;
+header .brand,
+header .brand:visited {
+  color: var(--ink);
   text-decoration: none;
 }
 
