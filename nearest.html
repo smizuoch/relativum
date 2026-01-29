@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Relativum - 近い人</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Relativum</h1>
+    <p>自己との距離やクラスターの近さを確認。</p>
+    <nav>
+      <a href="index.html">登録</a>
+      <a href="viz.html">可視化</a>
+      <a class="active" href="nearest.html">近い人</a>
+      <a href="settings.html">設定</a>
+    </nav>
+  </header>
+
+  <main class="app-grid">
+    <section class="card">
+      <h2>距離の基準</h2>
+      <div class="controls-row">
+        <label for="reference-select">基準</label>
+        <select id="reference-select"></select>
+        <label for="metric-select">距離</label>
+        <select id="metric-select">
+          <option value="embedding">埋め込み (PCA)</option>
+          <option value="raw">生回答 (重み付き)</option>
+        </select>
+      </div>
+      <p class="small" id="reference-note"></p>
+    </section>
+
+    <section class="card" style="grid-column: 1 / -1;">
+      <h2>近い人リスト</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>順位</th>
+              <th>名前</th>
+              <th>距離</th>
+              <th>Cluster</th>
+              <th>ハイライト</th>
+            </tr>
+          </thead>
+          <tbody id="nearest-table"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" style="padding-left: clamp(20px, 3vw, 40px);">
+    Relativum — 近傍探索
+  </footer>
+
+  <script type="module" src="assets/js/nearest-page.js"></script>
+</body>
+</html>

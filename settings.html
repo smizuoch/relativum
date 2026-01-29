@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Relativum - 設定</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Relativum</h1>
+    <p>自己設定・重み・アクセシビリティ。</p>
+    <nav>
+      <a href="index.html">登録</a>
+      <a href="viz.html">可視化</a>
+      <a href="nearest.html">近い人</a>
+      <a class="active" href="settings.html">設定</a>
+    </nav>
+  </header>
+
+  <main class="app-grid">
+    <section class="card">
+      <h2>自己の設定</h2>
+      <label for="self-select">self person</label>
+      <select id="self-select"></select>
+      <p class="small">自己を原点にした可視化が可能です。</p>
+    </section>
+
+    <section class="card">
+      <h2>アクセシビリティ</h2>
+      <div class="controls-row">
+        <label><input type="checkbox" id="reduce-motion" /> Reduce motion</label>
+        <label><input type="checkbox" id="high-contrast" /> High contrast</label>
+      </div>
+      <label for="font-scale" style="display:block;margin-top:8px;">Font size</label>
+      <input id="font-scale" type="range" min="0.9" max="1.4" step="0.05" />
+    </section>
+
+    <section class="card">
+      <h2>分析設定</h2>
+      <div class="controls-row">
+        <label for="min-answers">最小回答数</label>
+        <input id="min-answers" type="number" min="0" max="36" step="1" />
+        <label for="stability-wins">k安定化回数</label>
+        <input id="stability-wins" type="number" min="1" max="10" step="1" />
+      </div>
+      <label style="display:block;margin-top:8px;">
+        <input type="checkbox" id="participation-scaling" />
+        参加度スケーリング (Polis-style)
+      </label>
+    </section>
+
+    <section class="card" style="grid-column: 1 / -1;">
+      <h2>設問の重み (0〜2)</h2>
+      <div id="weights-list" class="list"></div>
+    </section>
+
+    <section class="card">
+      <h2>リセット</h2>
+      <button id="reset-data" class="secondary">ローカルデータを初期化</button>
+      <p class="small">この操作は取り消せません。</p>
+    </section>
+  </main>
+
+  <footer class="footer" style="padding-left: clamp(20px, 3vw, 40px);">
+    Relativum — Settings
+  </footer>
+
+  <script type="module" src="assets/js/settings-page.js"></script>
+</body>
+</html>

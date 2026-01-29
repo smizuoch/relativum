@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Relativum - 可視化</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Relativum</h1>
+    <p>Polis-style PCA & クラスタで相対的な距離を確認。</p>
+    <nav>
+      <a href="index.html">登録</a>
+      <a class="active" href="viz.html">可視化</a>
+      <a href="nearest.html">近い人</a>
+      <a href="settings.html">設定</a>
+    </nav>
+  </header>
+
+  <main class="app-grid viz-grid">
+    <section class="card">
+      <h2>表示オプション</h2>
+      <div class="controls-row">
+        <label for="axis-select">2D 軸</label>
+        <select id="axis-select">
+          <option value="0-1">PC1 vs PC2</option>
+          <option value="0-2">PC1 vs PC3</option>
+          <option value="1-2">PC2 vs PC3</option>
+        </select>
+        <span class="small">3D/2Dを同時表示</span>
+      </div>
+      <div class="controls-row" style="margin-top: 8px;">
+        <label for="origin-select">原点 (self)</label>
+        <select id="origin-select"></select>
+        <span class="small" id="origin-note"></span>
+      </div>
+      <div class="controls-row" style="margin-top: 8px;">
+        <label><input type="checkbox" id="show-labels" /> ラベル表示</label>
+        <label>点サイズ <input type="range" id="point-size" min="4" max="12" value="6" /></label>
+        <button id="download-analysis" class="secondary">分析JSONを保存</button>
+        <label class="secondary" style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;">
+          <input id="import-json" type="file" accept="application/json" class="sr-only" />
+          JSONを読み込む
+        </label>
+      </div>
+      <p class="small" id="analysis-summary"></p>
+      <div class="notice" id="analysis-warning" hidden>回答数が不足している人は除外されています。</div>
+    </section>
+
+    <section class="card">
+      <h2>3D / 2D 可視化</h2>
+      <div class="canvas-wrap">
+        <h3 class="small" style="margin: 6px 0 10px;">3D (PC1/PC2/PC3)</h3>
+        <canvas id="canvas-3d"></canvas>
+      </div>
+      <div class="canvas-wrap" style="margin-top: 14px;">
+        <h3 class="small" style="margin: 6px 0 10px;">2D 投影</h3>
+        <canvas id="canvas-2d"></canvas>
+      </div>
+      <p class="small">ドラッグで回転 / スクロールでズーム。形状でクラスタを区別。</p>
+      <div class="controls-row">
+        <label for="point-select">詳細</label>
+        <select id="point-select"></select>
+        <div id="point-details" class="small"></div>
+      </div>
+    </section>
+
+    <section class="card" style="grid-column: 1 / -1;">
+      <h2>代替テーブル (アクセシビリティ)</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>名前</th>
+              <th>Cluster</th>
+              <th>PC1</th>
+              <th>PC2</th>
+              <th>PC3</th>
+            </tr>
+          </thead>
+          <tbody id="coords-table"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" style="padding-left: clamp(20px, 3vw, 40px);">
+    Relativum — PCA + k-means++
+  </footer>
+
+  <script type="module" src="assets/js/viz-page.js"></script>
+</body>
+</html>
