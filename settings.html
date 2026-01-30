@@ -5,9 +5,9 @@
   <meta http-equiv="Content-Language" content="ja" />
   <meta name="google" content="notranslate" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="自己設定・重み・アクセシビリティ。" />
-  <meta property="og:title" content="Relativum - 設定" />
-  <meta property="og:description" content="自己設定・重み・アクセシビリティ。" />
+  <meta name="description" content="自己設定・重み・アクセシビリティ。" data-i18n-attr="content:settings.description" />
+  <meta property="og:title" content="Relativum - 設定" data-i18n-attr="content:settings.title" />
+  <meta property="og:description" content="自己設定・重み・アクセシビリティ。" data-i18n-attr="content:settings.description" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://relativum.me/settings.html" />
   <meta property="og:site_name" content="Relativum" />
@@ -15,11 +15,11 @@
   <meta property="og:image" content="https://relativum.me/images/Relativum.png" />
   <meta property="og:image:alt" content="Relativum" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Relativum - 設定" />
-  <meta name="twitter:description" content="自己設定・重み・アクセシビリティ。" />
+  <meta name="twitter:title" content="Relativum - 設定" data-i18n-attr="content:settings.title" />
+  <meta name="twitter:description" content="自己設定・重み・アクセシビリティ。" data-i18n-attr="content:settings.description" />
   <meta name="twitter:image" content="https://relativum.me/images/Relativum.png" />
   <meta name="twitter:image:alt" content="Relativum" />
-  <title>Relativum - 設定</title>
+  <title data-i18n="settings.title">Relativum - 設定</title>
   <link rel="canonical" href="https://relativum.me/settings.html" />
   <link rel="icon" href="images/R.png" type="image/png" />
   <link rel="apple-touch-icon" href="images/R.png" />
@@ -28,82 +28,88 @@
 <body>
   <header>
     <h1><a class="brand" href="index.html">Relativum</a></h1>
-    <p>自己設定・重み・アクセシビリティ。</p>
+    <p data-i18n="settings.tagline">自己設定・重み・アクセシビリティ。</p>
     <nav>
-      <a href="index.html">登録</a>
-      <a href="viz.html">可視化</a>
-      <a href="nearest.html">近い人</a>
-      <a class="active" href="settings.html">設定</a>
+      <a href="index.html" data-i18n="nav.register">登録</a>
+      <a href="viz.html" data-i18n="nav.visualize">可視化</a>
+      <a href="nearest.html" data-i18n="nav.nearest">近い人</a>
+      <a class="active" href="settings.html" data-i18n="nav.settings">設定</a>
     </nav>
   </header>
 
   <main class="app-grid">
     <section class="card">
-      <h2>自己の設定</h2>
-      <label for="self-select">self person</label>
+      <h2 data-i18n="settings.selfSection">自己の設定</h2>
+      <label for="self-select" data-i18n="settings.selfLabel">self person</label>
       <select id="self-select"></select>
-      <p class="small">自己を原点にした可視化が可能です。</p>
+      <p class="small" data-i18n="settings.selfNote">自己を原点にした可視化が可能です。</p>
     </section>
 
     <section class="card">
-      <h2>アクセシビリティ</h2>
+      <h2 data-i18n="settings.accessibility">アクセシビリティ</h2>
       <div class="controls-row">
-        <label><input type="checkbox" id="reduce-motion" /> Reduce motion</label>
-        <label><input type="checkbox" id="high-contrast" /> High contrast</label>
+        <label><input type="checkbox" id="reduce-motion" /> <span data-i18n="settings.reduceMotion">Reduce motion</span></label>
+        <label><input type="checkbox" id="high-contrast" /> <span data-i18n="settings.highContrast">High contrast</span></label>
       </div>
-      <label for="theme-select" style="display:block;margin-top:8px;">テーマ</label>
+      <label for="theme-select" style="display:block;margin-top:8px;" data-i18n="settings.themeLabel">テーマ</label>
       <select id="theme-select">
-        <option value="system">端末の設定に合わせる</option>
-        <option value="light">ライト</option>
-        <option value="dark">ダーク</option>
+        <option value="system" data-i18n="settings.themeSystem">端末の設定に合わせる</option>
+        <option value="light" data-i18n="settings.themeLight">ライト</option>
+        <option value="dark" data-i18n="settings.themeDark">ダーク</option>
       </select>
-      <label for="font-scale" style="display:block;margin-top:8px;">Font size</label>
+      <label for="font-scale" style="display:block;margin-top:8px;" data-i18n="settings.fontSize">Font size</label>
       <input id="font-scale" type="range" min="0.9" max="1.4" step="0.05" />
+      <label for="language-select" style="display:block;margin-top:8px;" data-i18n="settings.languageLabel">言語</label>
+      <select id="language-select">
+        <option value="auto" data-i18n="settings.languageAuto">自動 (端末)</option>
+        <option value="ja" data-i18n="settings.languageJapanese">日本語</option>
+        <option value="en" data-i18n="settings.languageEnglish">English</option>
+      </select>
     </section>
 
     <section class="card">
-      <h2>分析設定</h2>
+      <h2 data-i18n="settings.analysisSection">分析設定</h2>
       <div class="controls-row">
-        <label for="min-answers">最小回答数</label>
+        <label for="min-answers" data-i18n="settings.minAnswers">最小回答数</label>
         <input id="min-answers" type="number" min="0" max="60" step="1" />
-        <label for="stability-wins">k安定化回数</label>
+        <label for="stability-wins" data-i18n="settings.stabilityWins">k安定化回数</label>
         <input id="stability-wins" type="number" min="1" max="10" step="1" />
       </div>
       <label style="display:block;margin-top:8px;">
         <input type="checkbox" id="participation-scaling" />
-        参加度スケーリング (Polis-style)
+        <span data-i18n="settings.participationScaling">参加度スケーリング (Polis-style)</span>
       </label>
-      <p class="small" style="margin-top:8px;">
+      <p class="small" style="margin-top:8px;" data-i18n="settings.pcaNote">
         PC1〜PC3は回答傾向を要約した主成分の軸です。PC1が最も大きなばらつきを表し、PC2/PC3は直交する補助軸。
         符号や向きに絶対的な意味はなく、点同士の相対距離が近いほど回答傾向が近いことを示します。
       </p>
     </section>
 
     <section class="card">
-      <h2>カスタム質問</h2>
+      <h2 data-i18n="settings.customQuestions">カスタム質問</h2>
       <div class="controls-row">
-        <input id="custom-question-text" type="text" placeholder="質問文" />
-        <button id="add-custom-question">追加</button>
+        <input id="custom-question-text" type="text" placeholder="質問文" data-i18n-attr="placeholder:settings.customPlaceholder" />
+        <button id="add-custom-question" data-i18n="settings.addCustom">追加</button>
       </div>
-      <p class="small">ローカルに保存され、分析に含まれます。</p>
+      <p class="small" data-i18n="settings.customNote">ローカルに保存され、分析に含まれます。</p>
       <div id="custom-questions-list" class="list"></div>
     </section>
 
     <section class="card" style="grid-column: 1 / -1;">
-      <h2>設問の重み (0〜2)</h2>
+      <h2 data-i18n="settings.weights">設問の重み (0〜2)</h2>
       <div id="weights-list" class="list"></div>
     </section>
 
     <section class="card">
-      <h2>リセット</h2>
-      <button id="reset-data" class="secondary">ローカルデータを初期化</button>
-      <p class="small">この操作は取り消せません。</p>
+      <h2 data-i18n="settings.reset">リセット</h2>
+      <button id="reset-data" class="secondary" data-i18n="settings.resetButton">ローカルデータを初期化</button>
+      <p class="small" data-i18n="settings.resetWarning">この操作は取り消せません。</p>
     </section>
   </main>
 
   <footer class="footer" style="padding-left: clamp(20px, 3vw, 40px);">
-    Relativum — Settings / © 2026 Relativum /
-    <a href="https://github.com/smizuoch/relativum" target="_blank" rel="noopener">GitHub リポジトリ</a>
+    <span data-i18n="settings.footer">Relativum — Settings / © 2026 Relativum /</span>
+    <a href="https://github.com/smizuoch/relativum" target="_blank" rel="noopener" data-i18n="settings.githubRepo">GitHub リポジトリ</a>
   </footer>
 
   <script type="module" src="assets/js/settings-page.js"></script>

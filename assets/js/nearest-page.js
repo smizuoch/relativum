@@ -2,9 +2,11 @@ import { loadState, saveState, applyA11yState } from "./app-state.js";
 import { runAnalysis } from "./analysis.js";
 import { getAllQuestions } from "./question-utils.js";
 import { byId, createOption, formatNumber } from "./ui.js";
+import { applyTranslations, getTranslator } from "./i18n.js";
 
 let state = loadState();
 applyA11yState(state);
+applyTranslations(state);
 
 const elements = {
   referenceSelect: byId("reference-select"),
@@ -15,6 +17,10 @@ const elements = {
 
 let analysis = null;
 
+function t(key, vars) {
+  return getTranslator(state).t(key, vars);
+}
+
 function buildAnalysis() {
   analysis = runAnalysis(state);
   saveState(state);
@@ -24,10 +30,11 @@ function renderReferenceOptions() {
   elements.referenceSelect.innerHTML = "";
   const self = state.settings?.selfPersonId;
   if (!self) {
-    elements.referenceSelect.appendChild(createOption("centroid", "重心 (全体の中心)", true));
+    elements.referenceSelect.appendChild(createOption("centroid", t("nearest.centroidOption"), true));
   } else {
     const selfPerson = state.people.find((p) => p.id === self);
-    elements.referenceSelect.appendChild(createOption(self, `自己 (${selfPerson?.displayName || "未設定"})`, true));
+    const name = selfPerson?.displayName || t("common.notSet");
+    elements.referenceSelect.appendChild(createOption(self, t("nearest.selfOption", { name }), true));
   }
   state.people.forEach((person) => {
     elements.referenceSelect.appendChild(createOption(person.id, person.displayName));
@@ -101,14 +108,14 @@ function highlightDifferences(personId, referenceId) {
   });
   diffs.sort((x, y) => y.diff - x.diff);
   const top = diffs.slice(0, 2).map((d) => `${d.id}: ${d.a}/${d.b}`);
-  return top.join(" · ") || "一致度が高い";
+  return top.join(" · ") || t("common.highSimilarity");
 }
 
 function renderTable() {
   elements.table.innerHTML = "";
   if (!analysis.people.length) {
     const row = document.createElement("tr");
-    row.innerHTML = "<td colspan=\"5\">データが不足しています。</td>";
+    row.innerHTML = `<td colspan="5">${t("common.dataInsufficient")}</td>`;
     elements.table.appendChild(row);
     return;
   }
@@ -140,12 +147,13 @@ function renderTable() {
   });
 
   rows.forEach((row, index) => {
+    const clusterLabel = t("common.clusterNumber", { index: row.cluster + 1 });
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${index + 1}</td>
       <td>${row.person.displayName}</td>
       <td>${row.distance == null ? "-" : formatNumber(row.distance, 3)}</td>
-      <td>Cluster ${row.cluster + 1}</td>
+      <td>${clusterLabel}</td>
       <td>${row.highlight}</td>
     `;
     elements.table.appendChild(tr);
@@ -154,9 +162,9 @@ function renderTable() {
 
 function updateNote() {
   if (state.settings?.selfPersonId) {
-    elements.note.textContent = "selfPersonId が設定されている場合は自己が基準になります。";
+    elements.note.textContent = t("nearest.noteSelf");
   } else {
-    elements.note.textContent = "self が未設定の場合は重心、または任意の人を基準にできます。";
+    elements.note.textContent = t("nearest.noteNoSelf");
   }
 }
 

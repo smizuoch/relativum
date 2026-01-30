@@ -1,4 +1,5 @@
-import { QUESTIONS, QUESTION_BY_ID, SIMPLE_QUESTION_IDS } from "./questions.js";
+import { QUESTIONS, QUESTION_BY_ID, SIMPLE_QUESTION_IDS, getQuestionText } from "./questions.js";
+import { resolveLanguage } from "./i18n.js";
 
 const QUESTION_MODES = {
   simple: "simple",
@@ -21,8 +22,13 @@ export function getBaseQuestions(mode) {
   return SIMPLE_QUESTION_IDS.map((id) => QUESTION_BY_ID[id]).filter(Boolean);
 }
 
-export function getAllQuestions(state, modeOverride = null) {
+export function getAllQuestions(state, modeOverride = null, languageOverride = null) {
   const base = getBaseQuestions(modeOverride ?? getQuestionMode(state));
+  const language = languageOverride || resolveLanguage(state);
+  const localizedBase = base.map((q) => ({
+    ...q,
+    text: getQuestionText(q, language),
+  }));
   const custom = Array.isArray(state?.customQuestions) ? state.customQuestions : [];
   const normalizedCustom = custom
     .filter((q) => q && q.id && q.text)
@@ -32,7 +38,7 @@ export function getAllQuestions(state, modeOverride = null) {
       weight: Number.isFinite(q.weight) ? q.weight : 1.0,
       custom: true,
     }));
-  return [...base, ...normalizedCustom];
+  return [...localizedBase, ...normalizedCustom];
 }
 
 export function createCustomQuestion(text) {

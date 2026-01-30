@@ -18,7 +18,7 @@ export function draw2DScatter(canvas, points, options = {}) {
   }
   ctx.clearRect(0, 0, width, height);
   if (points.length === 0) {
-    drawEmptyState(ctx, width, height, "データが不足しています");
+    drawEmptyState(ctx, width, height, options.emptyMessage || "Not enough data.");
     return;
   }
 

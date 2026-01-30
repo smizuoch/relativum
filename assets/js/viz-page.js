@@ -4,9 +4,11 @@ import { draw2DScatter } from "./viz-2d.js";
 import { create3DScatter, getShapeForCluster } from "./viz-3d.js";
 import { byId, createOption, formatNumber } from "./ui.js";
 import { importStateFile, validateImportedState } from "./data-io.js";
+import { applyTranslations, getTranslator } from "./i18n.js";
 
 let state = loadState();
 applyA11yState(state);
+applyTranslations(state);
 
 const elements = {
   axisSelect: byId("axis-select"),
@@ -25,10 +27,15 @@ const elements = {
   coordsTable: byId("coords-table"),
 };
 
+function t(key, vars) {
+  return getTranslator(state).t(key, vars);
+}
+
 const viz3d = create3DScatter(elements.canvas3d, {
   showLabels: false,
   pointSize: Number(elements.pointSize.value),
   highContrast: state.settings?.viz?.highContrast,
+  emptyMessage: t("common.dataInsufficient"),
 });
 
 let analysis = null;
@@ -52,17 +59,15 @@ function buildPoints() {
 
 function renderOriginSelect() {
   elements.originSelect.innerHTML = "";
-  elements.originSelect.appendChild(createOption("", "未設定", !state.settings.selfPersonId));
+  elements.originSelect.appendChild(createOption("", t("common.notSet"), !state.settings.selfPersonId));
   state.people.forEach((person) => {
     elements.originSelect.appendChild(
       createOption(person.id, person.displayName, person.id === state.settings.selfPersonId)
     );
   });
   const name =
-    state.people.find((p) => p.id === state.settings.selfPersonId)?.displayName || "未設定";
-  elements.originNote.textContent = state.settings.selfPersonId
-    ? `原点 = ${name}`
-    : "self 未設定の場合は原点は平均中心";
+    state.people.find((p) => p.id === state.settings.selfPersonId)?.displayName || t("common.notSet");
+  elements.originNote.textContent = state.settings.selfPersonId ? t("viz.originSet", { name }) : t("viz.originUnset");
 }
 
 function renderSummary() {
@@ -71,14 +76,20 @@ function renderSummary() {
   const chosenK = analysis.clustering?.chosenK ?? 0;
   const minAnswers = state.settings?.analysis?.minAnswers ?? 7;
   const originName =
-    state.people.find((p) => p.id === state.settings.selfPersonId)?.displayName || "平均中心";
-  elements.summary.textContent = `対象 ${includedCount}人 / 除外 ${excludedCount}人 · クラスタ k=${chosenK} · 原点 ${originName} · 最小回答数 ${minAnswers}`;
+    state.people.find((p) => p.id === state.settings.selfPersonId)?.displayName || t("common.centroid");
+  elements.summary.textContent = t("viz.summary", {
+    included: includedCount,
+    excluded: excludedCount,
+    k: chosenK,
+    origin: originName,
+    minAnswers,
+  });
   elements.warning.hidden = excludedCount === 0;
 }
 
 function renderPointSelect() {
   elements.pointSelect.innerHTML = "";
-  elements.pointSelect.appendChild(createOption("", "選択してください", true));
+  elements.pointSelect.appendChild(createOption("", t("common.selectPrompt"), true));
   points.forEach((point) => {
     elements.pointSelect.appendChild(createOption(point.id, point.label));
   });
@@ -91,22 +102,24 @@ function renderPointDetails() {
     return;
   }
   const coords = selected.coords.map((value) => formatNumber(value, 3));
-  elements.pointDetails.textContent = `Cluster ${selected.cluster + 1} · [${coords.join(", ")} ]`;
+  const clusterLabel = t("common.clusterNumber", { index: selected.cluster + 1 });
+  elements.pointDetails.textContent = `${clusterLabel} · [${coords.join(", ")}]`;
 }
 
 function renderTable() {
   elements.coordsTable.innerHTML = "";
   if (!points.length) {
     const row = document.createElement("tr");
-    row.innerHTML = "<td colspan=\"5\">データが不足しています。</td>";
+    row.innerHTML = `<td colspan="5">${t("common.dataInsufficient")}</td>`;
     elements.coordsTable.appendChild(row);
     return;
   }
   points.forEach((point) => {
+    const clusterLabel = t("common.clusterNumber", { index: point.cluster + 1 });
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${point.label}</td>
-      <td>Cluster ${point.cluster + 1}</td>
+      <td>${clusterLabel}</td>
       <td>${formatNumber(point.coords[0])}</td>
       <td>${formatNumber(point.coords[1])}</td>
       <td>${formatNumber(point.coords[2])}</td>
@@ -129,6 +142,7 @@ function renderViz() {
     showAxes: true,
     showOrigin: true,
     showGrid: true,
+    emptyMessage: t("common.dataInsufficient"),
   });
   const [a, b] = elements.axisSelect.value.split("-").map(Number);
   const data = points.map((p) => ({
@@ -145,6 +159,7 @@ function renderViz() {
     pointSize,
     highContrast,
     centerOnOrigin,
+    emptyMessage: t("common.dataInsufficient"),
   });
 }
 
@@ -189,7 +204,7 @@ function bindEvents() {
   elements.importJson.addEventListener("change", async (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    if (!confirm("現在のデータを上書きします。続行しますか？")) {
+    if (!confirm(t("common.importConfirm"))) {
       event.target.value = "";
       return;
     }
@@ -197,11 +212,13 @@ function bindEvents() {
       const raw = await importStateFile(file);
       const validated = validateImportedState(raw);
       if (!validated.ok) {
-        throw new Error(validated.error);
+        const message = validated.errorKey ? t(validated.errorKey) : validated.error;
+        throw new Error(message);
       }
       saveState(raw);
       state = loadState();
       applyA11yState(state);
+      applyTranslations(state);
       buildPoints();
       renderOriginSelect();
       renderSummary();
@@ -210,7 +227,7 @@ function bindEvents() {
       renderTable();
       renderViz();
     } catch (err) {
-      alert(`インポートに失敗しました: ${err.message}`);
+      alert(t("common.importFailed", { error: err.message }));
     }
     event.target.value = "";
   });

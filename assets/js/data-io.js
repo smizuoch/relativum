@@ -30,10 +30,10 @@ export function importStateFile(file) {
 
 export function validateImportedState(raw) {
   if (!raw || typeof raw !== "object") {
-    return { ok: false, error: "JSONの形式が不正です。" };
+    return { ok: false, errorKey: "errors.invalidJson", error: "JSONの形式が不正です。" };
   }
   if (!Array.isArray(raw.people) || typeof raw.ratings !== "object") {
-    return { ok: false, error: "people または ratings が不足しています。" };
+    return { ok: false, errorKey: "errors.missingFields", error: "people または ratings が不足しています。" };
   }
   return { ok: true, value: raw };
 }

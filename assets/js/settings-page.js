@@ -1,9 +1,11 @@
 import { getAllQuestions, createCustomQuestion } from "./question-utils.js";
 import { applyA11yState, loadState, resetState, saveState } from "./app-state.js";
 import { byId, createOption } from "./ui.js";
+import { applyTranslations, getTranslator, normalizeLanguage } from "./i18n.js";
 
 let state = loadState();
 applyA11yState(state);
+applyTranslations(state);
 
 const elements = {
   selfSelect: byId("self-select"),
@@ -11,6 +13,7 @@ const elements = {
   highContrast: byId("high-contrast"),
   themeSelect: byId("theme-select"),
   fontScale: byId("font-scale"),
+  languageSelect: byId("language-select"),
   minAnswers: byId("min-answers"),
   stabilityWins: byId("stability-wins"),
   participationScaling: byId("participation-scaling"),
@@ -21,6 +24,10 @@ const elements = {
   resetData: byId("reset-data"),
 };
 
+function t(key, vars) {
+  return getTranslator(state).t(key, vars);
+}
+
 function persist() {
   saveState(state);
   applyA11yState(state);
@@ -28,7 +35,7 @@ function persist() {
 
 function renderSelfSelect() {
   elements.selfSelect.innerHTML = "";
-  elements.selfSelect.appendChild(createOption("", "未設定", !state.settings.selfPersonId));
+  elements.selfSelect.appendChild(createOption("", t("common.notSet"), !state.settings.selfPersonId));
   state.people.forEach((person) => {
     elements.selfSelect.appendChild(
       createOption(person.id, person.displayName, person.id === state.settings.selfPersonId)
@@ -53,7 +60,7 @@ function renderWeights() {
     input.max = "2";
     input.step = "0.1";
     input.value = state.settings.weights[question.id] ?? 1;
-    input.setAttribute("aria-label", `${question.id} 重み`);
+    input.setAttribute("aria-label", t("settings.weightAria", { id: question.id }));
     input.addEventListener("input", () => {
       const value = Number(input.value);
       state.settings.weights[question.id] = Number.isFinite(value) ? value : 1;
@@ -73,7 +80,7 @@ function renderCustomQuestions() {
   if (!custom.length) {
     const empty = document.createElement("p");
     empty.className = "small";
-    empty.textContent = "カスタム質問はまだありません。";
+    empty.textContent = t("settings.customEmpty");
     elements.customQuestionsList.appendChild(empty);
     return;
   }
@@ -84,7 +91,7 @@ function renderCustomQuestions() {
     const textInput = document.createElement("input");
     textInput.type = "text";
     textInput.value = question.text;
-    textInput.setAttribute("aria-label", `${question.id} 質問文`);
+    textInput.setAttribute("aria-label", t("settings.questionAria", { id: question.id }));
     textInput.addEventListener("input", () => {
       question.text = textInput.value;
       persist();
@@ -96,9 +103,9 @@ function renderCustomQuestions() {
     actions.className = "row-actions";
     const removeButton = document.createElement("button");
     removeButton.className = "secondary";
-    removeButton.textContent = "削除";
+    removeButton.textContent = t("settings.deleteCustom");
     removeButton.addEventListener("click", () => {
-      if (!confirm("このカスタム質問を削除しますか？")) return;
+      if (!confirm(t("settings.confirmDeleteCustom"))) return;
       state.customQuestions = custom.filter((q) => q.id !== question.id);
       delete state.settings.weights[question.id];
       persist();
@@ -134,6 +141,16 @@ function bindEvents() {
     const value = elements.themeSelect.value;
     state.settings.viz.theme = value === "light" || value === "dark" ? value : "system";
     persist();
+  });
+
+  elements.languageSelect.addEventListener("change", () => {
+    state.settings.language = normalizeLanguage(elements.languageSelect.value);
+    persist();
+    applyTranslations(state);
+    renderSelfSelect();
+    renderCustomQuestions();
+    renderWeights();
+    initControls();
   });
 
   elements.fontScale.addEventListener("input", () => {
@@ -178,7 +195,7 @@ function bindEvents() {
   });
 
   elements.resetData.addEventListener("click", () => {
-    if (!confirm("ローカルデータをすべて削除しますか？")) return;
+    if (!confirm(t("settings.confirmReset"))) return;
     resetState();
     location.reload();
   });
@@ -189,6 +206,7 @@ function initControls() {
   elements.highContrast.checked = !!state.settings.viz.highContrast;
   elements.themeSelect.value = state.settings.viz.theme || "system";
   elements.fontScale.value = state.settings.viz.fontScale || 1;
+  elements.languageSelect.value = normalizeLanguage(state.settings.language);
   elements.minAnswers.value = state.settings.analysis.minAnswers ?? 7;
   elements.stabilityWins.value = state.settings.analysis.stabilityWins ?? 4;
   elements.participationScaling.checked = !!state.settings.analysis.participationScaling;

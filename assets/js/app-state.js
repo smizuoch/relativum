@@ -1,4 +1,5 @@
 import { QUESTIONS } from "./questions.js";
+import { resolveLanguage, translate } from "./i18n.js";
 
 const STORAGE_KEY = "relativum-state-v1";
 
@@ -12,6 +13,7 @@ export function createDefaultState() {
     settings: {
       selfPersonId: null,
       questionMode: "simple",
+      language: "auto",
       weights,
       viz: {
         labels: true,
@@ -68,6 +70,8 @@ function mergeState(base, incoming) {
     ...base.settings,
     ...(incoming?.settings || {}),
   };
+  const incomingLanguage = normalizeLanguage(state.settings.language);
+  state.settings.language = incomingLanguage;
   const incomingMode = incoming?.settings?.questionMode;
   if (incomingMode === "simple" || incomingMode === "detailed") {
     state.settings.questionMode = incomingMode;
@@ -108,11 +112,17 @@ function mergeState(base, incoming) {
   return state;
 }
 
-export function createPerson(displayName) {
+function normalizeLanguage(value) {
+  return value === "ja" || value === "en" || value === "auto" ? value : "auto";
+}
+
+export function createPerson(displayName, language = null) {
   const safeName = String(displayName || "").trim();
+  const fallbackLang = language || resolveLanguage({ settings: { language: "auto" } });
+  const fallbackName = translate(fallbackLang, "common.unnamed");
   return {
     id: `p_${Date.now()}_${Math.random().toString(16).slice(2, 8)}`,
-    displayName: safeName || "(無名)",
+    displayName: safeName || fallbackName,
     notes: "",
   };
 }

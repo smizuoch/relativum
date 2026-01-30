@@ -11,9 +11,11 @@ import {
 } from "./app-state.js";
 import { exportState, importStateFile, validateImportedState } from "./data-io.js";
 import { byId, announce, createOption } from "./ui.js";
+import { applyTranslations, getTranslator, resolveLanguage } from "./i18n.js";
 
 let state = loadState();
 applyA11yState(state);
+applyTranslations(state);
 let currentPersonId = state.settings?.lastPersonId || null;
 
 const elements = {
@@ -29,6 +31,10 @@ const elements = {
   status: byId("status"),
 };
 
+function t(key, vars) {
+  return getTranslator(state).t(key, vars);
+}
+
 function persist() {
   state.settings.lastPersonId = currentPersonId;
   saveState(state);
@@ -39,7 +45,7 @@ function renderPeopleList() {
   if (!state.people.length) {
     const empty = document.createElement("p");
     empty.className = "small";
-    empty.textContent = "まだ登録がありません。";
+    empty.textContent = t("index.emptyPeople");
     elements.peopleList.appendChild(empty);
     return;
   }
@@ -51,7 +57,7 @@ function renderPeopleList() {
     const nameInput = document.createElement("input");
     nameInput.type = "text";
     nameInput.value = person.displayName;
-    nameInput.setAttribute("aria-label", `${person.displayName} の名前`);
+    nameInput.setAttribute("aria-label", t("index.nameAria", { name: person.displayName }));
     nameInput.addEventListener("input", () => {
       person.displayName = nameInput.value;
       renderPersonSelect();
@@ -59,7 +65,7 @@ function renderPeopleList() {
     });
     const notesInput = document.createElement("input");
     notesInput.type = "text";
-    notesInput.placeholder = "メモ (任意)";
+    notesInput.placeholder = t("index.notesPlaceholder");
     notesInput.value = person.notes || "";
     notesInput.addEventListener("input", () => {
       person.notes = notesInput.value;
@@ -72,7 +78,7 @@ function renderPeopleList() {
     actions.className = "row-actions";
     const selectButton = document.createElement("button");
     selectButton.className = "secondary";
-    selectButton.textContent = "回答する";
+    selectButton.textContent = t("index.answerButton");
     selectButton.addEventListener("click", () => {
       currentPersonId = person.id;
       renderPersonSelect();
@@ -81,9 +87,9 @@ function renderPeopleList() {
     });
     const deleteButton = document.createElement("button");
     deleteButton.className = "secondary";
-    deleteButton.textContent = "削除";
+    deleteButton.textContent = t("index.deleteButton");
     deleteButton.addEventListener("click", () => {
-      if (!confirm("この人を削除しますか？")) return;
+      if (!confirm(t("index.deleteConfirm"))) return;
       state.people = state.people.filter((p) => p.id !== person.id);
       delete state.ratings[person.id];
       if (currentPersonId === person.id) {
@@ -119,8 +125,8 @@ function renderModeSelect() {
   const current = getQuestionMode(state);
   elements.modeSelect.innerHTML = "";
   const labels = {
-    [modes.simple]: "簡易モード (10問)",
-    [modes.detailed]: "詳細モード (60問)",
+    [modes.simple]: t("index.modeSimple"),
+    [modes.detailed]: t("index.modeDetailed"),
   };
   Object.values(modes).forEach((mode) => {
     elements.modeSelect.appendChild(createOption(mode, labels[mode] || mode, mode === current));
@@ -134,9 +140,9 @@ function renderQuestions() {
   if (!currentPersonId) {
     const empty = document.createElement("p");
     empty.className = "small";
-    empty.textContent = "先に対象の人を選択してください。";
+    empty.textContent = t("index.selectPersonFirst");
     elements.questionList.appendChild(empty);
-    elements.progressText.textContent = `回答: 0/${questions.length}`;
+    elements.progressText.textContent = t("index.progress", { answered: 0, total: questions.length });
     return;
   }
   ensureRatingsForPerson(state, currentPersonId);
@@ -151,10 +157,10 @@ function renderQuestions() {
     const group = document.createElement("div");
     group.className = "radio-group";
     const options = [
-      { label: "+1 思う", value: "1" },
-      { label: "-1 思わない", value: "-1" },
-      { label: "0 わからない", value: "0" },
-      { label: "未回答", value: "null" },
+      { label: t("index.ratingPositive"), value: "1" },
+      { label: t("index.ratingNegative"), value: "-1" },
+      { label: t("index.ratingUnknown"), value: "0" },
+      { label: t("index.ratingUnanswered"), value: "null" },
     ];
     const currentValue = getRating(state, currentPersonId, question.id);
 
@@ -192,16 +198,16 @@ function updateProgress(questionIds = null) {
   if (!currentPersonId) return;
   const ids = questionIds || getAllQuestions(state).map((q) => q.id);
   const answered = getAnsweredCount(state, currentPersonId, ids);
-  elements.progressText.textContent = `回答: ${answered}/${ids.length}`;
+  elements.progressText.textContent = t("index.progress", { answered, total: ids.length });
 }
 
 function addPerson() {
   const name = elements.newName.value.trim();
   if (!name) {
-    announce("名前を入力してください。", elements.status);
+    announce(t("index.nameRequired"), elements.status);
     return;
   }
-  const person = createPerson(name);
+  const person = createPerson(name, resolveLanguage(state));
   state.people.push(person);
   ensureRatingsForPerson(state, person.id);
   currentPersonId = person.id;
@@ -210,7 +216,7 @@ function addPerson() {
   renderPersonSelect();
   renderQuestions();
   persist();
-  announce("追加しました。", elements.status);
+  announce(t("index.added"), elements.status);
 }
 
 function bindEvents() {
@@ -234,7 +240,7 @@ function bindEvents() {
   elements.importJson.addEventListener("change", async (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    if (!confirm("現在のデータを上書きします。続行しますか？")) {
+    if (!confirm(t("common.importConfirm"))) {
       event.target.value = "";
       return;
     }
@@ -242,20 +248,22 @@ function bindEvents() {
       const raw = await importStateFile(file);
       const validated = validateImportedState(raw);
       if (!validated.ok) {
-        throw new Error(validated.error);
+        const message = validated.errorKey ? t(validated.errorKey) : validated.error;
+        throw new Error(message);
       }
       saveState(raw);
       state = loadState();
       currentPersonId = state.settings?.lastPersonId || state.people[0]?.id || null;
       applyA11yState(state);
+      applyTranslations(state);
       renderModeSelect();
       renderPeopleList();
       renderPersonSelect();
       renderQuestions();
       persist();
-      announce("インポートしました。", elements.status);
+      announce(t("common.imported"), elements.status);
     } catch (err) {
-      announce(`インポートに失敗しました: ${err.message}`, elements.status);
+      announce(t("common.importFailed", { error: err.message }), elements.status);
     }
     event.target.value = "";
   });

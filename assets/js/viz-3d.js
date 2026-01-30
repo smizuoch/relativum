@@ -66,7 +66,13 @@ export function create3DScatter(canvas, options = {}) {
     ctx.fillStyle = state.options.highContrast ? "#ffffff" : "#0f1115";
     ctx.fillRect(0, 0, width, height);
     if (!state.points.length) {
-      drawEmptyState(ctx, width, height, "データが不足しています", state.options.highContrast);
+      drawEmptyState(
+        ctx,
+        width,
+        height,
+        state.options.emptyMessage || "Not enough data.",
+        state.options.highContrast
+      );
       return;
     }
     const sceneScale = getSceneScale(state.points);

@@ -5,9 +5,17 @@
   <meta http-equiv="Content-Language" content="ja" />
   <meta name="google" content="notranslate" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="簡易10問・詳細60問で相対的な位置関係を可視化するための、個人向けプライベートツール。" />
-  <meta property="og:title" content="Relativum - 登録と評価" />
-  <meta property="og:description" content="簡易10問・詳細60問で相対的な位置関係を可視化するための、個人向けプライベートツール。" />
+  <meta
+    name="description"
+    content="簡易10問・詳細60問で相対的な位置関係を可視化するための、個人向けプライベートツール。"
+    data-i18n-attr="content:index.description"
+  />
+  <meta property="og:title" content="Relativum - 登録と評価" data-i18n-attr="content:index.title" />
+  <meta
+    property="og:description"
+    content="簡易10問・詳細60問で相対的な位置関係を可視化するための、個人向けプライベートツール。"
+    data-i18n-attr="content:index.description"
+  />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://relativum.me/" />
   <meta property="og:site_name" content="Relativum" />
@@ -15,11 +23,15 @@
   <meta property="og:image" content="https://relativum.me/images/Relativum.png" />
   <meta property="og:image:alt" content="Relativum" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Relativum - 登録と評価" />
-  <meta name="twitter:description" content="簡易10問・詳細60問で相対的な位置関係を可視化するための、個人向けプライベートツール。" />
+  <meta name="twitter:title" content="Relativum - 登録と評価" data-i18n-attr="content:index.title" />
+  <meta
+    name="twitter:description"
+    content="簡易10問・詳細60問で相対的な位置関係を可視化するための、個人向けプライベートツール。"
+    data-i18n-attr="content:index.description"
+  />
   <meta name="twitter:image" content="https://relativum.me/images/Relativum.png" />
   <meta name="twitter:image:alt" content="Relativum" />
-  <title>Relativum - 登録と評価</title>
+  <title data-i18n="index.title">Relativum - 登録と評価</title>
   <link rel="canonical" href="https://relativum.me/" />
   <link rel="icon" href="images/R.png" type="image/png" />
   <link rel="apple-touch-icon" href="images/R.png" />
@@ -28,38 +40,44 @@
 <body>
   <header>
     <h1><a class="brand" href="index.html">Relativum</a></h1>
-    <p>簡易10問・詳細60問で相対的な位置関係を可視化するための、個人向けプライベートツール。</p>
+    <p data-i18n="index.tagline">簡易10問・詳細60問で相対的な位置関係を可視化するための、個人向けプライベートツール。</p>
     <nav>
-      <a class="active" href="index.html">登録</a>
-      <a href="viz.html">可視化</a>
-      <a href="nearest.html">近い人</a>
-      <a href="settings.html">設定</a>
+      <a class="active" href="index.html" data-i18n="nav.register">登録</a>
+      <a href="viz.html" data-i18n="nav.visualize">可視化</a>
+      <a href="nearest.html" data-i18n="nav.nearest">近い人</a>
+      <a href="settings.html" data-i18n="nav.settings">設定</a>
     </nav>
   </header>
 
   <main class="app-grid">
     <section class="card">
-      <h2>People Manager</h2>
+      <h2 data-i18n="index.peopleManager">People Manager</h2>
       <div class="controls-row">
-        <input id="new-person-name" type="text" placeholder="名前 (Aさん)" aria-label="新しい人の名前" />
-        <button id="add-person">追加</button>
-        <button id="export-json" class="secondary">Export JSON</button>
+        <input
+          id="new-person-name"
+          type="text"
+          placeholder="名前 (Aさん)"
+          aria-label="新しい人の名前"
+          data-i18n-attr="placeholder:index.addPersonPlaceholder,aria-label:index.addPersonAria"
+        />
+        <button id="add-person" data-i18n="index.addPersonButton">追加</button>
+        <button id="export-json" class="secondary" data-i18n="common.exportJson">Export JSON</button>
         <label class="secondary" style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;">
           <input id="import-json" type="file" accept="application/json" class="sr-only" />
-          Import JSON
+          <span data-i18n="common.importJson">Import JSON</span>
         </label>
       </div>
       <p class="small" id="status" role="status" aria-live="polite"></p>
-      <p class="small">登録した人はローカルに保存されます。</p>
+      <p class="small" data-i18n="index.localSaveNote">登録した人はローカルに保存されます。</p>
       <div id="people-list" class="list" aria-live="polite"></div>
     </section>
 
     <section class="card">
-      <h2>質問への回答</h2>
+      <h2 data-i18n="index.answerSection">質問への回答</h2>
       <div class="controls-row">
-        <label for="person-select">対象の人</label>
+        <label for="person-select" data-i18n="index.personLabel">対象の人</label>
         <select id="person-select"></select>
-        <label for="mode-select">モード</label>
+        <label for="mode-select" data-i18n="index.modeLabel">モード</label>
         <select id="mode-select"></select>
       </div>
       <p class="small" id="progress-text">回答: 0/10</p>
@@ -68,7 +86,7 @@
   </main>
 
   <footer class="footer" style="padding-left: clamp(20px, 3vw, 40px);">
-    Relativum — ローカル保存 / GitHub Pages
+    <span data-i18n="index.footer">Relativum — ローカル保存 / GitHub Pages</span>
   </footer>
 
   <script type="module" src="assets/js/index.js"></script>

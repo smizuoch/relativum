@@ -5,9 +5,9 @@
   <meta http-equiv="Content-Language" content="ja" />
   <meta name="google" content="notranslate" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Polis-style PCA & クラスタで相対的な距離を確認。" />
-  <meta property="og:title" content="Relativum - 可視化" />
-  <meta property="og:description" content="Polis-style PCA & クラスタで相対的な距離を確認。" />
+  <meta name="description" content="Polis-style PCA & クラスタで相対的な距離を確認。" data-i18n-attr="content:viz.description" />
+  <meta property="og:title" content="Relativum - 可視化" data-i18n-attr="content:viz.title" />
+  <meta property="og:description" content="Polis-style PCA & クラスタで相対的な距離を確認。" data-i18n-attr="content:viz.description" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://relativum.me/viz.html" />
   <meta property="og:site_name" content="Relativum" />
@@ -15,11 +15,11 @@
   <meta property="og:image" content="https://relativum.me/images/Relativum.png" />
   <meta property="og:image:alt" content="Relativum" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Relativum - 可視化" />
-  <meta name="twitter:description" content="Polis-style PCA & クラスタで相対的な距離を確認。" />
+  <meta name="twitter:title" content="Relativum - 可視化" data-i18n-attr="content:viz.title" />
+  <meta name="twitter:description" content="Polis-style PCA & クラスタで相対的な距離を確認。" data-i18n-attr="content:viz.description" />
   <meta name="twitter:image" content="https://relativum.me/images/Relativum.png" />
   <meta name="twitter:image:alt" content="Relativum" />
-  <title>Relativum - 可視化</title>
+  <title data-i18n="viz.title">Relativum - 可視化</title>
   <link rel="canonical" href="https://relativum.me/viz.html" />
   <link rel="icon" href="images/R.png" type="image/png" />
   <link rel="apple-touch-icon" href="images/R.png" />
@@ -28,75 +28,75 @@
 <body>
   <header>
     <h1><a class="brand" href="index.html">Relativum</a></h1>
-    <p>Polis-style PCA & クラスタで相対的な距離を確認。</p>
+    <p data-i18n="viz.tagline">Polis-style PCA & クラスタで相対的な距離を確認。</p>
     <nav>
-      <a href="index.html">登録</a>
-      <a class="active" href="viz.html">可視化</a>
-      <a href="nearest.html">近い人</a>
-      <a href="settings.html">設定</a>
+      <a href="index.html" data-i18n="nav.register">登録</a>
+      <a class="active" href="viz.html" data-i18n="nav.visualize">可視化</a>
+      <a href="nearest.html" data-i18n="nav.nearest">近い人</a>
+      <a href="settings.html" data-i18n="nav.settings">設定</a>
     </nav>
   </header>
 
   <main class="app-grid viz-grid">
     <section class="card">
-      <h2>表示オプション</h2>
+      <h2 data-i18n="viz.displayOptions">表示オプション</h2>
       <div class="controls-row">
-        <label for="axis-select">2D 軸</label>
+        <label for="axis-select" data-i18n="viz.axisLabel">2D 軸</label>
         <select id="axis-select">
           <option value="0-1">PC1 vs PC2</option>
           <option value="0-2">PC1 vs PC3</option>
           <option value="1-2">PC2 vs PC3</option>
         </select>
-        <span class="small">3D/2Dを同時表示</span>
+        <span class="small" data-i18n="viz.show3d2d">3D/2Dを同時表示</span>
       </div>
       <div class="controls-row" style="margin-top: 8px;">
-        <label for="origin-select">原点 (self)</label>
+        <label for="origin-select" data-i18n="viz.originLabel">原点 (self)</label>
         <select id="origin-select"></select>
         <span class="small" id="origin-note"></span>
       </div>
       <div class="controls-row" style="margin-top: 8px;">
-        <label><input type="checkbox" id="show-labels" /> ラベル表示</label>
-        <label>点サイズ <input type="range" id="point-size" min="4" max="12" value="6" /></label>
-        <button id="download-analysis" class="secondary">分析JSONを保存</button>
+        <label><input type="checkbox" id="show-labels" /> <span data-i18n="viz.showLabels">ラベル表示</span></label>
+        <label><span data-i18n="viz.pointSize">点サイズ</span> <input type="range" id="point-size" min="4" max="12" value="6" /></label>
+        <button id="download-analysis" class="secondary" data-i18n="viz.saveAnalysis">分析JSONを保存</button>
         <label class="secondary" style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;">
           <input id="import-json" type="file" accept="application/json" class="sr-only" />
-          JSONを読み込む
+          <span data-i18n="viz.importJson">JSONを読み込む</span>
         </label>
       </div>
       <p class="small" id="analysis-summary"></p>
-      <div class="notice" id="analysis-warning" hidden>回答数が不足している人は除外されています。</div>
-      <p class="small" style="margin-top:8px;">
+      <div class="notice" id="analysis-warning" hidden data-i18n="viz.analysisWarning">回答数が不足している人は除外されています。</div>
+      <p class="small" style="margin-top:8px;" data-i18n="viz.pcaNote">
         PC1〜PC3は回答傾向を要約した主成分の軸です。PC1が最も大きなばらつきを表し、PC2/PC3は直交する補助軸。
         符号や向きに絶対的な意味はなく、点同士の相対距離が近いほど回答傾向が近いことを示します。
       </p>
     </section>
 
     <section class="card">
-      <h2>3D / 2D 可視化</h2>
+      <h2 data-i18n="viz.vizTitle">3D / 2D 可視化</h2>
       <div class="canvas-wrap">
-        <h3 class="small" style="margin: 6px 0 10px;">3D (PC1/PC2/PC3)</h3>
+        <h3 class="small" style="margin: 6px 0 10px;" data-i18n="viz.canvas3d">3D (PC1/PC2/PC3)</h3>
         <canvas id="canvas-3d"></canvas>
       </div>
       <div class="canvas-wrap" style="margin-top: 14px;">
-        <h3 class="small" style="margin: 6px 0 10px;">2D 投影</h3>
+        <h3 class="small" style="margin: 6px 0 10px;" data-i18n="viz.canvas2d">2D 投影</h3>
         <canvas id="canvas-2d"></canvas>
       </div>
-      <p class="small">ドラッグで回転 / スクロールでズーム。形状でクラスタを区別。</p>
+      <p class="small" data-i18n="viz.controlsNote">ドラッグで回転 / スクロールでズーム。形状でクラスタを区別。</p>
       <div class="controls-row">
-        <label for="point-select">詳細</label>
+        <label for="point-select" data-i18n="viz.detailsLabel">詳細</label>
         <select id="point-select"></select>
         <div id="point-details" class="small"></div>
       </div>
     </section>
 
     <section class="card" style="grid-column: 1 / -1;">
-      <h2>代替テーブル (アクセシビリティ)</h2>
+      <h2 data-i18n="viz.tableTitle">代替テーブル (アクセシビリティ)</h2>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>名前</th>
-              <th>Cluster</th>
+              <th data-i18n="viz.tableName">名前</th>
+              <th data-i18n="viz.tableCluster">Cluster</th>
               <th>PC1</th>
               <th>PC2</th>
               <th>PC3</th>
@@ -109,7 +109,7 @@
   </main>
 
   <footer class="footer" style="padding-left: clamp(20px, 3vw, 40px);">
-    Relativum — PCA + k-means++
+    <span data-i18n="viz.footer">Relativum — PCA + k-means++</span>
   </footer>
 
   <script type="module" src="assets/js/viz-page.js"></script>

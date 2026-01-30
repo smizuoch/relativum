@@ -5,9 +5,9 @@
   <meta http-equiv="Content-Language" content="ja" />
   <meta name="google" content="notranslate" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="自己との距離やクラスターの近さを確認。" />
-  <meta property="og:title" content="Relativum - 近い人" />
-  <meta property="og:description" content="自己との距離やクラスターの近さを確認。" />
+  <meta name="description" content="自己との距離やクラスターの近さを確認。" data-i18n-attr="content:nearest.description" />
+  <meta property="og:title" content="Relativum - 近い人" data-i18n-attr="content:nearest.title" />
+  <meta property="og:description" content="自己との距離やクラスターの近さを確認。" data-i18n-attr="content:nearest.description" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://relativum.me/nearest.html" />
   <meta property="og:site_name" content="Relativum" />
@@ -15,11 +15,11 @@
   <meta property="og:image" content="https://relativum.me/images/Relativum.png" />
   <meta property="og:image:alt" content="Relativum" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Relativum - 近い人" />
-  <meta name="twitter:description" content="自己との距離やクラスターの近さを確認。" />
+  <meta name="twitter:title" content="Relativum - 近い人" data-i18n-attr="content:nearest.title" />
+  <meta name="twitter:description" content="自己との距離やクラスターの近さを確認。" data-i18n-attr="content:nearest.description" />
   <meta name="twitter:image" content="https://relativum.me/images/Relativum.png" />
   <meta name="twitter:image:alt" content="Relativum" />
-  <title>Relativum - 近い人</title>
+  <title data-i18n="nearest.title">Relativum - 近い人</title>
   <link rel="canonical" href="https://relativum.me/nearest.html" />
   <link rel="icon" href="images/R.png" type="image/png" />
   <link rel="apple-touch-icon" href="images/R.png" />
@@ -28,41 +28,41 @@
 <body>
   <header>
     <h1><a class="brand" href="index.html">Relativum</a></h1>
-    <p>自己との距離やクラスターの近さを確認。</p>
+    <p data-i18n="nearest.tagline">自己との距離やクラスターの近さを確認。</p>
     <nav>
-      <a href="index.html">登録</a>
-      <a href="viz.html">可視化</a>
-      <a class="active" href="nearest.html">近い人</a>
-      <a href="settings.html">設定</a>
+      <a href="index.html" data-i18n="nav.register">登録</a>
+      <a href="viz.html" data-i18n="nav.visualize">可視化</a>
+      <a class="active" href="nearest.html" data-i18n="nav.nearest">近い人</a>
+      <a href="settings.html" data-i18n="nav.settings">設定</a>
     </nav>
   </header>
 
   <main class="app-grid">
     <section class="card">
-      <h2>距離の基準</h2>
+      <h2 data-i18n="nearest.distanceBasis">距離の基準</h2>
       <div class="controls-row">
-        <label for="reference-select">基準</label>
+        <label for="reference-select" data-i18n="nearest.referenceLabel">基準</label>
         <select id="reference-select"></select>
-        <label for="metric-select">距離</label>
+        <label for="metric-select" data-i18n="nearest.metricLabel">距離</label>
         <select id="metric-select">
-          <option value="embedding">埋め込み (PCA)</option>
-          <option value="raw">生回答 (重み付き)</option>
+          <option value="embedding" data-i18n="nearest.metricEmbedding">埋め込み (PCA)</option>
+          <option value="raw" data-i18n="nearest.metricRaw">生回答 (重み付き)</option>
         </select>
       </div>
       <p class="small" id="reference-note"></p>
     </section>
 
     <section class="card" style="grid-column: 1 / -1;">
-      <h2>近い人リスト</h2>
+      <h2 data-i18n="nearest.listTitle">近い人リスト</h2>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>順位</th>
-              <th>名前</th>
-              <th>距離</th>
-              <th>Cluster</th>
-              <th>ハイライト</th>
+              <th data-i18n="nearest.tableRank">順位</th>
+              <th data-i18n="nearest.tableName">名前</th>
+              <th data-i18n="nearest.tableDistance">距離</th>
+              <th data-i18n="nearest.tableCluster">Cluster</th>
+              <th data-i18n="nearest.tableHighlight">ハイライト</th>
             </tr>
           </thead>
           <tbody id="nearest-table"></tbody>
@@ -72,7 +72,7 @@
   </main>
 
   <footer class="footer" style="padding-left: clamp(20px, 3vw, 40px);">
-    Relativum — 近傍探索
+    <span data-i18n="nearest.footer">Relativum — 近傍探索</span>
   </footer>
 
   <script type="module" src="assets/js/nearest-page.js"></script>
